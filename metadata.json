@@ -1,0 +1,5 @@
+{
+  "name": "Copy of RealtorAI Studio",
+  "description": "A conversational, AI-native photo editing environment that lets users upload, chat, and transform images using Gemini models. It supports both interior and exterior creative transformations, artistic styles, inpainting, and imaginative AI-assisted edits through natural conversation or prebuilt editing presets.",
+  "requestFramePermissions": []
+}

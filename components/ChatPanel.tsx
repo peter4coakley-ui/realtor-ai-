@@ -30,7 +30,7 @@ const EditPresets: React.FC<{ onPresetSelect: (agent: EditAgent) => void, isDisa
                             variant="ghost"
                             className={`flex flex-col items-center justify-center h-14 min-w-[90px] px-3 text-center group flex-shrink-0 ${
                                 isExterior
-                                    ? 'border border-emerald-600/40 bg-emerald-950/20 hover:bg-emerald-900/30 hover:border-emerald-500/60'
+                                    ? 'border border-emerald-600/40 bg-emerald-900/10 hover:bg-emerald-800/20 hover:border-emerald-500/60'
                                     : 'border border-gray-700/40 hover:bg-gray-700/50'
                             }`}
                             title={agent.description}
@@ -44,7 +44,7 @@ const EditPresets: React.FC<{ onPresetSelect: (agent: EditAgent) => void, isDisa
                             }`} />
                             <span className={`text-[10px] mt-1 transition-colors leading-tight ${
                                 isExterior
-                                    ? 'text-emerald-300/90 group-hover:text-emerald-200'
+                                    ? 'text-emerald-300 group-hover:text-emerald-200'
                                     : 'text-gray-400 group-hover:text-white'
                             }`}>{agent.name}</span>
                         </Button>

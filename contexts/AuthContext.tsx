@@ -47,10 +47,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     let mounted = true;
+    let timeoutId: NodeJS.Timeout;
 
     const initializeAuth = async () => {
       try {
+        timeoutId = setTimeout(() => {
+          if (mounted) {
+            console.warn('Auth initialization timed out after 5 seconds');
+            setLoading(false);
+          }
+        }, 5000);
+
         const { data: { session: initialSession } } = await supabase.auth.getSession();
+
+        clearTimeout(timeoutId);
 
         if (mounted) {
           setSession(initialSession);
@@ -63,6 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
+        clearTimeout(timeoutId);
         if (mounted) {
           setLoading(false);
         }
@@ -92,6 +103,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => {
       mounted = false;
+      clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
   }, []);
@@ -104,10 +116,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('id', userId)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching profile:', error);
+        setProfile(null);
+        return;
+      }
       setProfile(data);
     } catch (error) {
       console.error('Error fetching profile:', error);
+      setProfile(null);
     }
   };
 

@@ -39,7 +39,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               <span className="text-xl font-bold text-white">{APP_NAME}</span>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" onClick={onSignIn} className="hidden sm:inline-flex text-gray-300 hover:text-white">
+              <Button variant="ghost" onClick={onSignIn} className="text-gray-300 hover:text-white">
                 Sign In
               </Button>
               <Button onClick={onGetStarted} className="bg-teal-500 hover:bg-teal-600 text-white">
@@ -66,8 +66,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               <Button size="lg" onClick={onGetStarted} className="bg-teal-500 hover:bg-teal-600 text-white text-lg px-8 py-6">
                 Start Free Trial
               </Button>
-              <Button size="lg" variant="outline" onClick={onSignIn} className="border-2 border-teal-500 text-teal-400 hover:bg-teal-500/10 text-lg px-8 py-6">
-                Watch Demo
+              <Button size="lg" variant="outline" onClick={onSignIn} className="border-2 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white hover:border-gray-500 text-lg px-8 py-6">
+                Sign In
               </Button>
             </div>
             <p className="mt-4 text-sm text-gray-400">7-day free trial • No credit card required • Cancel anytime</p>

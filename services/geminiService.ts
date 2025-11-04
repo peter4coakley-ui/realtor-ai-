@@ -1,7 +1,10 @@
 import { GoogleGenAI, FunctionDeclaration, Modality, Type, GenerateContentResponse } from '@google/genai';
 
-// Assume process.env.API_KEY is available
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Get API key from Vite environment variables
+const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+
+// Only initialize if API key is present
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 /**
  * Extracts the MIME type and base64 data from a data URL.
@@ -49,6 +52,9 @@ export async function interpretUserIntent(
   chatHistory: { role: 'user' | 'assistant'; content: string }[],
   newUserMessage: string
 ): Promise<{ prompt: string } | null> {
+  if (!ai) {
+    throw new Error('Google API key is not configured. Please add VITE_GOOGLE_API_KEY to your .env file.');
+  }
 
   const formattedHistory = chatHistory.map(msg => ({
     role: msg.role === 'user' ? 'user' : 'model',
@@ -104,6 +110,9 @@ export async function generateImageEdit(
   prompt: string,
   maskBase64?: string
 ): Promise<string> {
+    if (!ai) {
+        throw new Error('Google API key is not configured. Please add VITE_GOOGLE_API_KEY to your .env file.');
+    }
     const { mimeType, data: imageData } = extractMimeTypeAndData(base64Image);
     
     const imagePart = {
@@ -159,6 +168,9 @@ The user's request is: "${prompt}"`;
 }
 
 export async function analyzeImageAndSuggestEdits(base64Image: string): Promise<string> {
+  if (!ai) {
+    throw new Error('Google API key is not configured. Please add VITE_GOOGLE_API_KEY to your .env file.');
+  }
   const { mimeType, data: imageData } = extractMimeTypeAndData(base64Image);
 
   const imagePart = {
@@ -187,6 +199,9 @@ export async function analyzeImageAndSuggestEdits(base64Image: string): Promise<
 }
 
 export async function analyzeAndNameImage(base64Image: string): Promise<string> {
+  if (!ai) {
+    throw new Error('Google API key is not configured. Please add VITE_GOOGLE_API_KEY to your .env file.');
+  }
   const { mimeType, data: imageData } = extractMimeTypeAndData(base64Image);
   const imagePart = {
     inlineData: {

@@ -16,7 +16,10 @@ export const Icon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 );
 
 export const SendIcon: React.FC<{className?: string}> = (props) => (
-  <Icon {...props}><path d="m22 2-7 20-4-9-9-4Z"/><path d="m22 2-11 11"/></Icon>
+  <Icon {...props}>
+    <path d="m22 2-7 20-4-9-9-4Z" />
+    <path d="M22 2 11 13" />
+  </Icon>
 );
 
 export const UserIcon: React.FC<{className?: string}> = (props) => (
@@ -84,11 +87,16 @@ export const ChevronRightIcon: React.FC<{className?: string}> = (props) => (
 );
 
 export const StarIcon: React.FC<{className?: string}> = (props) => (
-    <Icon {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></Icon>
+    <Icon {...props}>
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </Icon>
 );
 
 export const BrushIcon: React.FC<{className?: string}> = (props) => (
-    <Icon {...props}><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08" /><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z" /></Icon>
+    <Icon {...props}>
+      <path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08" />
+      <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z" />
+    </Icon>
 );
 
 export const LayoutGridIcon: React.FC<{className?: string}> = (props) => (
@@ -116,19 +124,24 @@ export const XCircleIcon: React.FC<{className?: string}> = (props) => (
 );
 
 export const ExpandIcon: React.FC<{className?: string}> = (props) => (
-  <Icon {...props}><path d="M3 7V3h4"/><path d="M21 7V3h-4"/><path d="M3 17v4h4"/><path d="M21 17v4h-4"/></Icon>
+  <Icon {...props}>
+    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+  </Icon>
 );
 
 export const DownloadIcon: React.FC<{className?: string}> = (props) => (
-  <Icon {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></Icon>
+  <Icon {...props}>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" x2="12" y1="15" y2="3" />
+  </Icon>
 );
 
 export const WatermarkIcon: React.FC<{className?: string}> = (props) => (
   <Icon {...props}>
-    <path d="M2 13.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Z"/>
-    <path d="M2 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Z"/>
-    <path d="M2 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5Z"/>
-    <path d="M12.29 2.29a1 1 0 0 1 1.42 0l7 7a1 1 0 0 1 0 1.42l-7 7a1 1 0 0 1-1.42 0l-7-7a1 1 0 0 1 0-1.42l7-7Z"/>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M7 12l3 3 7-7" />
+    <path d="M8 8h8" />
   </Icon>
 );
 

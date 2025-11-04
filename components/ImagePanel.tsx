@@ -34,15 +34,15 @@ const Shimmer: React.FC = () => (
 );
 
 const ImageActions: React.FC<{onDownload: () => void, onViewFullScreen: () => void, onAddWatermark: () => void}> = ({ onDownload, onViewFullScreen, onAddWatermark }) => (
-    <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-        <Button onClick={onAddWatermark} variant="ghost" size="icon" className="h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50" title="Add Watermark">
-            <WatermarkIcon className="w-5 h-5 text-white" />
+    <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
+        <Button onClick={onAddWatermark} variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-black/40 backdrop-blur-md hover:bg-black/60 border border-white/10 transition-all" title="Add Watermark">
+            <WatermarkIcon className="w-4 h-4 text-white" />
         </Button>
-        <Button onClick={onViewFullScreen} variant="ghost" size="icon" className="h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50" title="Full Screen">
-            <ExpandIcon className="w-5 h-5 text-white" />
+        <Button onClick={onViewFullScreen} variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-black/40 backdrop-blur-md hover:bg-black/60 border border-white/10 transition-all" title="Full Screen">
+            <ExpandIcon className="w-4 h-4 text-white" />
         </Button>
-        <Button onClick={onDownload} variant="ghost" size="icon" className="h-10 w-10 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50" title="Download Image">
-            <DownloadIcon className="w-5 h-5 text-white" />
+        <Button onClick={onDownload} variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-black/40 backdrop-blur-md hover:bg-black/60 border border-white/10 transition-all" title="Download Image">
+            <DownloadIcon className="w-4 h-4 text-white" />
         </Button>
     </div>
 );
@@ -164,14 +164,14 @@ export const ImagePanel: React.FC<ImagePanelProps> = ({
         </div>
       )}
 
-      <div className="w-full flex justify-center items-center gap-4 absolute top-4 z-20">
-         <Button onClick={() => setIsInpaintMode(!isInpaintMode)} variant={isInpaintMode ? 'default' : 'ghost'} size="default" className="bg-gray-800/70 backdrop-blur-md border border-gray-700">
-            <BrushIcon className="w-5 h-5 mr-2" />
+      <div className="w-full flex justify-center items-center gap-3 absolute top-4 z-20">
+         <Button onClick={() => setIsInpaintMode(!isInpaintMode)} variant={isInpaintMode ? 'default' : 'ghost'} size="default" className="bg-gray-800/80 backdrop-blur-md border border-gray-700 hover:border-gray-600 shadow-lg">
+            <BrushIcon className="w-4 h-4 mr-2" />
             Inpaint
         </Button>
         {isInpaintMode && (
-          <div className="flex items-center gap-4 bg-gray-800/70 backdrop-blur-md border border-gray-700 p-2 rounded-lg">
-             <label htmlFor="brushSize" className="text-sm">Brush Size:</label>
+          <div className="flex items-center gap-3 bg-gray-800/80 backdrop-blur-md border border-gray-700 px-3 py-2 rounded-lg shadow-lg">
+             <label htmlFor="brushSize" className="text-xs font-medium text-gray-300">Brush:</label>
              <input
                 id="brushSize"
                 type="range"
@@ -179,16 +179,17 @@ export const ImagePanel: React.FC<ImagePanelProps> = ({
                 max="100"
                 value={brushSize}
                 onChange={(e) => setBrushSize(Number(e.target.value))}
-                className="w-32"
+                className="w-24 accent-teal-500"
              />
-             <Button onClick={clearMask} variant="ghost" size="sm">
-                <CleanIcon className="w-5 h-5 mr-2" />
-                Clear Mask
+             <span className="text-xs text-gray-400 w-8">{brushSize}</span>
+             <Button onClick={clearMask} variant="ghost" size="sm" className="hover:bg-gray-700">
+                <CleanIcon className="w-4 h-4 mr-1.5" />
+                Clear
             </Button>
           </div>
         )}
-        <Button onClick={() => onSaveToggle(image.id)} variant="ghost" size="default" className="bg-gray-800/70 backdrop-blur-md border border-gray-700">
-          <StarIcon className={`w-5 h-5 mr-2 transition-colors ${image.isSaved ? 'text-yellow-400 fill-current' : ''}`} />
+        <Button onClick={() => onSaveToggle(image.id)} variant="ghost" size="default" className="bg-gray-800/80 backdrop-blur-md border border-gray-700 hover:border-yellow-500/50 shadow-lg">
+          <StarIcon className={`w-4 h-4 mr-2 transition-colors ${image.isSaved ? 'text-yellow-400 fill-current' : 'text-gray-400'}`} />
           {image.isSaved ? 'Saved' : 'Save'}
         </Button>
       </div>
@@ -212,20 +213,20 @@ export const ImagePanel: React.FC<ImagePanelProps> = ({
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-900/50 hover:bg-gray-800/80 rounded-full"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/10 rounded-full transition-all"
                         onClick={onPrevVersion}
                         aria-label="Previous version"
                     >
-                        <ChevronLeftIcon className="w-6 h-6" />
+                        <ChevronLeftIcon className="w-5 h-5" />
                     </Button>
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-900/50 hover:bg-gray-800/80 rounded-full"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/10 rounded-full transition-all"
                         onClick={onNextVersion}
                         aria-label="Next version"
                     >
-                        <ChevronRightIcon className="w-6 h-6" />
+                        <ChevronRightIcon className="w-5 h-5" />
                     </Button>
                 </>
             )}

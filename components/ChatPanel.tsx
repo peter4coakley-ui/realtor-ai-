@@ -8,62 +8,65 @@ import { ScrollArea } from './ui/ScrollArea';
 import { EDIT_AGENTS } from '../constants';
 
 const EditPresets: React.FC<{ onPresetSelect: (agent: EditAgent) => void, isDisabled: boolean }> = ({ onPresetSelect, isDisabled }) => {
-    const interiorAgents = EDIT_AGENTS.filter(a => a.category === 'Interior');
-    const exteriorAgents = EDIT_AGENTS.filter(a => a.category === 'Exterior');
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div className="mb-4 space-y-4">
-            <div>
-                <h4 className="text-xs font-bold uppercase text-gray-500 mb-2 px-1">Interior</h4>
-                <div className="grid grid-cols-2 gap-2">
-                    {interiorAgents.map(agent => (
+        <div className="mb-3 relative">
+            <div
+                ref={scrollContainerRef}
+                className="flex gap-2 overflow-x-auto pb-2 px-1 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
+                style={{
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: '#374151 transparent',
+                    scrollSnapType: 'x mandatory'
+                }}
+            >
+                {EDIT_AGENTS.map(agent => {
+                    const isExterior = agent.category === 'Exterior';
+                    return (
                         <Button
                             key={agent.id}
                             onClick={() => onPresetSelect(agent)}
                             variant="ghost"
-                            className="flex flex-col items-center justify-center h-20 w-full p-2 text-center group"
+                            className={`flex flex-col items-center justify-center h-14 min-w-[90px] px-3 text-center group flex-shrink-0 scroll-snap-align-start ${
+                                isExterior
+                                    ? 'border border-emerald-600/40 bg-emerald-950/20 hover:bg-emerald-900/30 hover:border-emerald-500/60'
+                                    : 'border border-gray-700/40 hover:bg-gray-700/50'
+                            }`}
                             title={agent.description}
                             disabled={isDisabled}
                         >
-                            <agent.icon className="w-6 h-6 text-gray-400 group-hover:text-indigo-400 transition-colors" />
-                            <span className="text-xs mt-2 text-gray-400 group-hover:text-white transition-colors leading-tight">{agent.name}</span>
+                            <agent.icon className={`w-5 h-5 transition-colors ${
+                                isExterior
+                                    ? 'text-emerald-400 group-hover:text-emerald-300'
+                                    : 'text-gray-400 group-hover:text-teal-400'
+                            }`} />
+                            <span className={`text-[10px] mt-1 transition-colors leading-tight ${
+                                isExterior
+                                    ? 'text-emerald-300/90 group-hover:text-emerald-200'
+                                    : 'text-gray-400 group-hover:text-white'
+                            }`}>{agent.name}</span>
                         </Button>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
-            <div>
-                <h4 className="text-xs font-bold uppercase text-gray-500 mb-2 px-1">Exterior</h4>
-                <div className="grid grid-cols-2 gap-2">
-                    {exteriorAgents.map(agent => (
-                        <Button
-                            key={agent.id}
-                            onClick={() => onPresetSelect(agent)}
-                            variant="ghost"
-                            className="flex flex-col items-center justify-center h-20 w-full p-2 text-center group"
-                            title={agent.description}
-                            disabled={isDisabled}
-                        >
-                            <agent.icon className="w-6 h-6 text-gray-400 group-hover:text-indigo-400 transition-colors" />
-                            <span className="text-xs mt-2 text-gray-400 group-hover:text-white transition-colors leading-tight">{agent.name}</span>
-                        </Button>
-                    ))}
-                </div>
-            </div>
+            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-gray-800 to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-gray-800 to-transparent pointer-events-none" />
         </div>
     );
 }
 
 const ImageActions: React.FC<{onDownload: () => void, onViewFullScreen: () => void, onAddWatermark?: () => void}> = ({ onDownload, onViewFullScreen, onAddWatermark }) => (
-    <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+    <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         {onAddWatermark && (
-            <Button onClick={onAddWatermark} variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50" title="Add Watermark">
+            <Button onClick={onAddWatermark} variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-black/40 backdrop-blur-md hover:bg-black/60 border border-white/10" title="Add Watermark">
                 <WatermarkIcon className="w-4 h-4 text-white" />
             </Button>
         )}
-        <Button onClick={onViewFullScreen} variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50" title="Full Screen">
+        <Button onClick={onViewFullScreen} variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-black/40 backdrop-blur-md hover:bg-black/60 border border-white/10" title="Full Screen">
             <ExpandIcon className="w-4 h-4 text-white" />
         </Button>
-        <Button onClick={onDownload} variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/30 backdrop-blur-sm hover:bg-black/50" title="Download Image">
+        <Button onClick={onDownload} variant="ghost" size="icon" className="h-9 w-9 rounded-lg bg-black/40 backdrop-blur-md hover:bg-black/60 border border-white/10" title="Download Image">
             <DownloadIcon className="w-4 h-4 text-white" />
         </Button>
     </div>

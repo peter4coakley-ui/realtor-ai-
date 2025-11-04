@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { usePhotoMind } from './hooks/usePhotoMind';
 import LandingPage from './pages/LandingPage';
@@ -15,6 +15,16 @@ function AppContent() {
   const [view, setView] = useState<AppView>('landing');
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
 
+  useEffect(() => {
+    if (!user && view !== 'landing' && view !== 'auth') {
+      setView('landing');
+    }
+
+    if (user && (view === 'landing' || view === 'auth')) {
+      setView('home');
+    }
+  }, [user, view]);
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-900">
@@ -24,14 +34,6 @@ function AppContent() {
         </div>
       </div>
     );
-  }
-
-  if (!user && view !== 'landing' && view !== 'auth') {
-    setView('landing');
-  }
-
-  if (user && (view === 'landing' || view === 'auth')) {
-    setView('home');
   }
 
   const handleCreateProperty = async (files: File[]) => {

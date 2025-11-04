@@ -3,6 +3,7 @@ import { ChatPanel } from '../components/ChatPanel';
 import { ImagePanel } from '../components/ImagePanel';
 import { Header } from '../components/Header';
 import { PropertyImageNavigator } from '../components/PropertyImageNavigator';
+import { Button } from '../components/ui/Button';
 import type { PropertyListing } from '../types';
 import { downloadDataUrl } from '../utils/fileUtils';
 import { FullScreenViewer } from '../components/FullScreenViewer';

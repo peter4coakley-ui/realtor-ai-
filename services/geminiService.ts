@@ -98,8 +98,11 @@ Your final output is ONLY the function call. Do not add conversational text.`
   const functionCalls = response.functionCalls;
   if (functionCalls && functionCalls.length > 0) {
     const call = functionCalls[0];
-    if (call.name === 'performImageEdit') {
-      return { prompt: call.args.prompt };
+    if (call.name === 'performImageEdit' && call.args && typeof call.args === 'object') {
+      const args = call.args as { prompt?: string };
+      if (args.prompt && typeof args.prompt === 'string') {
+        return { prompt: args.prompt };
+      }
     }
   }
   return null;

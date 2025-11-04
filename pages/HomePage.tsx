@@ -22,7 +22,7 @@ const PropertyCard: React.FC<{ property: PropertyListing, onSelect: () => void }
   const coverImage = savedVersion || firstImageProject?.versions[0];
   
   return (
-    <button onClick={onSelect} className="group relative block w-full aspect-[4/3] rounded-lg overflow-hidden bg-gray-800 hover:ring-2 hover:ring-indigo-500 transition-all duration-200">
+    <button onClick={onSelect} className="group relative block w-full aspect-[4/3] rounded-lg overflow-hidden bg-gray-800 hover:ring-2 hover:ring-teal-500 transition-all duration-200">
       {coverImage && (
         <img src={coverImage.dataUrl} alt={property.address} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
       )}
@@ -77,7 +77,7 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty,
         {isLoading && (
             <div className="flex flex-col items-center justify-center h-full">
                 <div className="text-center p-8">
-                    <div className="w-16 h-16 border-4 border-dashed border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    <div className="w-16 h-16 border-4 border-dashed border-teal-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
                     <h2 className="mt-4 text-2xl font-bold">Importing Property...</h2>
                     <p className="mt-2 text-gray-400">Please wait while we fetch the property details and images.</p>
                 </div>
@@ -96,9 +96,9 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty,
           <div className="flex flex-col items-center justify-center h-full">
             <div className="text-center p-8 border-2 border-dashed border-gray-600 rounded-2xl max-w-2xl mx-auto">
               <UploadIcon className="w-16 h-16 mx-auto text-gray-500" />
-              <h2 className="mt-4 text-3xl font-bold">Welcome to RealtorAI Studio</h2>
+              <h2 className="mt-4 text-3xl font-bold">Welcome to PropertyLens AI</h2>
               <p className="mt-2 text-gray-400">Create your first property by uploading photos or importing from a web link.</p>
-              <label htmlFor={MAIN_FILE_INPUT_ID} className="mt-6 inline-block bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-lg cursor-pointer transition-colors">
+              <label htmlFor={MAIN_FILE_INPUT_ID} className="mt-6 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg cursor-pointer transition-colors">
                 Select Images to Start
               </label>
               <div className="my-6 text-gray-500">OR</div>

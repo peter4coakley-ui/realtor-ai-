@@ -40,6 +40,8 @@ const EditorPage: React.FC<EditorPageProps> = ({
     error,
 }) => {
   const [chatPanelWidth, setChatPanelWidth] = useState(400);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(true);
   const [activeMask, setActiveMask] = useState<string | null>(null);
   const [isNavigatorVisible, setIsNavigatorVisible] = useState(true);
   const [fullScreenImageUrl, setFullScreenImageUrl] = useState<string | null>(null);
@@ -75,9 +77,20 @@ const EditorPage: React.FC<EditorPageProps> = ({
   }, []);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth < 768) {
+        setIsChatOpen(false);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
+
     return () => {
+      window.removeEventListener('resize', checkMobile);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
@@ -123,8 +136,8 @@ const EditorPage: React.FC<EditorPageProps> = ({
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-200 overflow-hidden">
-      <Header 
-        onGoToProperty={onGoToProperty} 
+      <Header
+        onGoToProperty={onGoToProperty}
         currentView="editor"
         isNavigatorVisible={isNavigatorVisible}
         onToggleNavigator={() => setIsNavigatorVisible(prev => !prev)}
@@ -136,24 +149,44 @@ const EditorPage: React.FC<EditorPageProps> = ({
             onSelect={onSelectImageProject}
         />
       )}
-      <div className="flex flex-row flex-grow overflow-hidden">
-        <ChatPanel
-          messages={activeImageProject.chatHistory}
-          onSendMessage={handleSendMessage}
-          onPresetSubmit={onPresetSubmit}
-          isLoading={isLoading}
-          isDisabled={false} // Editor page is only shown for an active project
-          style={{ width: `${chatPanelWidth}px`}}
-          onViewFullScreen={setFullScreenImageUrl}
-          onDownloadImage={handleDownloadChatImage}
-          onAddWatermark={addWatermark}
-        />
-        <div
-          className="w-1.5 cursor-col-resize bg-gray-800 hover:bg-indigo-600 transition-colors duration-200 flex-shrink-0"
-          onMouseDown={handleMouseDown}
-          aria-label="Resize chat panel"
-          role="separator"
-        />
+
+      {isMobile && (
+        <div className="flex items-center justify-center p-2 bg-gray-800 border-b border-gray-700">
+          <Button
+            onClick={() => setIsChatOpen(!isChatOpen)}
+            variant="ghost"
+            size="sm"
+            className="text-teal-400"
+          >
+            {isChatOpen ? 'Hide AI Chat' : 'Show AI Chat'}
+          </Button>
+        </div>
+      )}
+
+      <div className="flex flex-col md:flex-row flex-grow overflow-hidden">
+        {(!isMobile || isChatOpen) && (
+          <>
+            <ChatPanel
+              messages={activeImageProject.chatHistory}
+              onSendMessage={handleSendMessage}
+              onPresetSubmit={onPresetSubmit}
+              isLoading={isLoading}
+              isDisabled={false}
+              style={isMobile ? {} : { width: `${chatPanelWidth}px` }}
+              onViewFullScreen={setFullScreenImageUrl}
+              onDownloadImage={handleDownloadChatImage}
+              onAddWatermark={addWatermark}
+            />
+            {!isMobile && (
+              <div
+                className="w-1.5 cursor-col-resize bg-gray-800 hover:bg-teal-600 transition-colors duration-200 flex-shrink-0"
+                onMouseDown={handleMouseDown}
+                aria-label="Resize chat panel"
+                role="separator"
+              />
+            )}
+          </>
+        )}
         <main className="flex-grow flex flex-col relative">
             <ImagePanel
               key={activeVersion.id} // Add key to force re-mount on version change for canvas

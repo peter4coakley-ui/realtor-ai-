@@ -8,17 +8,28 @@ export const EDIT_AGENTS: EditAgent[] = [
     name: 'Room Clearout',
     category: 'Interior',
     description: 'Instantly empty a room of all furniture and decor, creating a blank canvas for virtual staging.',
-    prompt: `**CRITICAL DIRECTIVE: METICULOUS VIRTUAL ROOM CLEAROUT**
-You are a meticulous digital restoration artist specializing in real estate. Your sole task is to execute a precise "room clearout."
+    prompt: `**CRITICAL DIRECTIVE: PROFESSIONAL MLS-COMPLIANT VIRTUAL ROOM CLEAROUT**
+You are an elite digital restoration artist with 10+ years specializing in high-end real estate photography. Your sole task is to execute a flawless, photorealistic "room clearout" that meets strict MLS and NAR compliance standards.
 
-**Primary Objective:** Remove ALL movable, non-permanent items. This includes: furniture, decorations, rugs (excluding wall-to-wall carpet), lamps, personal items, etc.
+**Primary Objective:** Remove ALL movable, non-permanent items while maintaining absolute photographic realism. This includes: furniture, decorations, area rugs (excluding wall-to-wall carpet), lamps, artwork, personal items, electronics, and clutter.
 
 **ABSOLUTE, NON-NEGOTIABLE CONSTRAINTS:**
-1.  **STRUCTURAL IMMUTABILITY:** You **MUST NOT** alter, modify, move, damage, or "improve" ANY permanent part of the room. This includes: Walls, flooring, ceiling, windows, doors, baseboards, trim, built-in shelves, fireplaces, kitchen cabinets, countertops, and permanent light fixtures. These elements are SACROSANCT.
-2.  **TEXTURE & LIGHTING CONTINUITY:** When an object is removed, you must reconstruct the area behind it by flawlessly cloning the textures, patterns, and lighting from the immediately surrounding, visible surfaces. The reconstruction must be seamless and imperceptible.
-3.  **PRESERVE ORIGINAL AMBIANCE:** The original lighting, shadows, color temperature, and reflections MUST be maintained. Do not introduce new light sources or alter the natural light.
+1.  **STRUCTURAL IMMUTABILITY (MLS CRITICAL):** You **MUST NOT** alter, modify, move, damage, or "improve" ANY permanent structural element. This includes: walls, flooring (material/color/pattern), ceiling, windows, doors, door frames, baseboards, crown molding, trim, built-in shelving, fireplace structure, kitchen cabinets, countertops, backsplashes, appliances, permanent light fixtures (chandeliers, recessed lighting, sconces), outlets, switches, thermostats, vents, and architectural details. These elements are LEGALLY PROTECTED and UNTOUCHABLE.
+2.  **PHOTOREALISTIC RECONSTRUCTION:** When removing objects, reconstruct the exposed area using advanced content-aware techniques. Clone textures, patterns, grain, lighting, shadows, and highlights from immediately adjacent visible surfaces. Pay extreme attention to: perspective distortion, light fall-off, subtle color variations, floor reflections, and wall texture continuity. The reconstruction must pass professional photographer scrutiny.
+3.  **LIGHTING PHYSICS PRESERVATION:** Maintain exact original lighting conditions including: direction, intensity, color temperature (warm/cool), shadow angles and softness, specular highlights, ambient occlusion in corners, light bounce from walls/ceiling, and time-of-day indicators. Do NOT add new light sources, brighten the scene, or alter window light quality.
 
-The final image must be a photorealistic representation of the exact same room, simply empty. It must appear as if it were photographed vacant.
+**QUALITY REQUIREMENTS:**
+- Final output must be indistinguishable from a professionally photographed empty room
+- No visible artifacts, blending errors, or unnatural patterns
+- Maintain original camera perspective, lens distortion, and depth of field
+- Preserve image resolution and sharpness throughout
+- Ensure consistent lighting across all surfaces
+
+**REAL ESTATE COMPLIANCE:**
+- This edit must be MLS-compliant: no structural misrepresentation
+- The empty room must accurately represent the actual space dimensions and features
+- All permanent fixtures must remain exactly as they exist in reality
+
 User's optional refinement: {userInput}`,
     icon: VirtualStagingIcon,
     requiresInput: false,
@@ -29,15 +40,27 @@ User's optional refinement: {userInput}`,
     name: 'Flooring Upgrade',
     category: 'Interior',
     description: 'Replace old flooring with a new style. Specify the style and color in the text box.',
-    prompt: `**CRITICAL DIRECTIVE: PRECISION VIRTUAL FLOORING REPLACEMENT**
-You are a meticulous digital restoration artist. Your sole task is to replace the main flooring surface with: {userInput}.
+    prompt: `**CRITICAL DIRECTIVE: PHOTOREALISTIC MLS-COMPLIANT FLOORING REPLACEMENT**
+You are an elite architectural visualization specialist. Your task is to replace ONLY the main flooring surface with: {userInput}, while maintaining perfect photorealistic quality and MLS compliance.
 
 **ABSOLUTE, NON-NEGOTIABLE CONSTRAINTS:**
-1.  **FLOOR ONLY:** You **MUST NOT** alter any other element in the room. Walls, baseboards, furniture, decor, doors, windows, and cabinets are SACROSANCT and must remain untouched.
-2.  **PHOTOREALISTIC INTEGRATION:** The new flooring must perfectly follow the room's perspective, scale, and lighting. All existing shadows cast by furniture and walls MUST be realistically preserved and rendered onto the new floor surface.
-3.  **CLEAN EDGES:** The boundary between the new floor and the baseboards/walls must be perfectly sharp and clean. No bleeding or blurring.
+1.  **FLOORING SURFACE ONLY:** You **MUST NOT** alter ANY other element. Walls, wall color, baseboards, trim, furniture, decor, rugs ON the floor, doors, door frames, windows, cabinets, countertops, appliances, lighting, and ceiling are LEGALLY PROTECTED and UNTOUCHABLE.
+2.  **ARCHITECTURAL PRECISION:** The new flooring must:
+   - Follow exact room perspective and vanishing points
+   - Match proper scale and plank/tile proportions for the specified material
+   - Respect all floor contours, transitions, and elevation changes
+   - Align properly with doorways and room geometry
+   - Show appropriate material characteristics (wood grain direction, tile grout lines, pattern repeats)
+3.  **ADVANCED LIGHTING INTEGRATION:**
+   - Preserve ALL existing shadows cast by furniture, cabinets, and architectural elements
+   - Match the new floor's reflectivity to the material type (matte hardwood vs glossy tile)
+   - Maintain light fall-off patterns from windows and fixtures
+   - Show proper ambient occlusion where floor meets walls and objects
+   - Preserve any natural light patterns, sun spots, or window reflections
+4.  **PERFECT EDGE WORK:** Baseboards/floor boundary must be pixel-perfect with zero bleeding, color contamination, or blur. Maintain original baseboard shadows and detail.
 
-The final image must be a photorealistic representation of the exact same room with ONLY the floor changed to {userInput}.`,
+**QUALITY STANDARDS:**
+Final output must look like the room was originally built with {userInput} flooring. Material texture, wear patterns, and finish quality should match high-end installation. No visible compositing artifacts.`,
     icon: FlooringIcon,
     requiresInput: true,
     inputPlaceholder: 'Enter flooring style & color...',

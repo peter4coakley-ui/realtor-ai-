@@ -13,6 +13,7 @@ interface PhotoMindState {
   activeVersionIndex: number;
   isLoading: boolean;
   error: string | null;
+  lastViewedVersions: Record<string, number>;
 }
 
 export const usePhotoMind = () => {
@@ -23,6 +24,7 @@ export const usePhotoMind = () => {
     activeVersionIndex: 0,
     isLoading: false,
     error: null,
+    lastViewedVersions: {},
   });
 
   const createPropertyFromFiles = useCallback(async (files: File[]): Promise<string | undefined> => {
@@ -186,14 +188,18 @@ export const usePhotoMind = () => {
     setState(prev => {
         const activeProperty = prev.propertyListings.find(p => p.id === prev.activePropertyId);
         const activeImageProject = activeProperty?.imageProjects.find(ip => ip.id === imageProjectId);
-        
-        // When switching to a new project, default to its latest version.
-        const newVersionIndex = activeImageProject ? activeImageProject.versions.length - 1 : 0;
-        
+
+        if (prev.activeImageProjectId) {
+            prev.lastViewedVersions[prev.activeImageProjectId] = prev.activeVersionIndex;
+        }
+
+        const newVersionIndex = prev.lastViewedVersions[imageProjectId] ?? (activeImageProject ? activeImageProject.versions.length - 1 : 0);
+
         return {
-            ...prev, 
+            ...prev,
             activeImageProjectId: imageProjectId,
             activeVersionIndex: newVersionIndex,
+            lastViewedVersions: { ...prev.lastViewedVersions },
         }
     });
   }, []);
@@ -433,7 +439,11 @@ export const usePhotoMind = () => {
         if (!activeImageProject || activeImageProject.versions.length <= 1) return prev;
 
         const newIndex = (prev.activeVersionIndex + 1) % activeImageProject.versions.length;
-        return { ...prev, activeVersionIndex: newIndex };
+        const updatedLastViewed = { ...prev.lastViewedVersions };
+        if (prev.activeImageProjectId) {
+            updatedLastViewed[prev.activeImageProjectId] = newIndex;
+        }
+        return { ...prev, activeVersionIndex: newIndex, lastViewedVersions: updatedLastViewed };
     });
   }, []);
 
@@ -442,9 +452,13 @@ export const usePhotoMind = () => {
         const activeProperty = prev.propertyListings.find(p => p.id === prev.activePropertyId);
         const activeImageProject = activeProperty?.imageProjects.find(ip => ip.id === prev.activeImageProjectId);
         if (!activeImageProject || activeImageProject.versions.length <= 1) return prev;
-        
+
         const newIndex = (prev.activeVersionIndex - 1 + activeImageProject.versions.length) % activeImageProject.versions.length;
-        return { ...prev, activeVersionIndex: newIndex };
+        const updatedLastViewed = { ...prev.lastViewedVersions };
+        if (prev.activeImageProjectId) {
+            updatedLastViewed[prev.activeImageProjectId] = newIndex;
+        }
+        return { ...prev, activeVersionIndex: newIndex, lastViewedVersions: updatedLastViewed };
     });
   }, []);
 

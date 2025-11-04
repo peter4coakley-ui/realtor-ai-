@@ -14,7 +14,7 @@ const EditPresets: React.FC<{ onPresetSelect: (agent: EditAgent) => void, isDisa
         <div className="mb-3 relative">
             <div
                 ref={scrollContainerRef}
-                className="flex gap-2 overflow-x-auto pb-2 px-1 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
+                className="flex gap-2 overflow-x-auto pb-2 px-1"
                 style={{
                     scrollbarWidth: 'thin',
                     scrollbarColor: '#374151 transparent',
@@ -28,13 +28,14 @@ const EditPresets: React.FC<{ onPresetSelect: (agent: EditAgent) => void, isDisa
                             key={agent.id}
                             onClick={() => onPresetSelect(agent)}
                             variant="ghost"
-                            className={`flex flex-col items-center justify-center h-14 min-w-[90px] px-3 text-center group flex-shrink-0 scroll-snap-align-start ${
+                            className={`flex flex-col items-center justify-center h-14 min-w-[90px] px-3 text-center group flex-shrink-0 ${
                                 isExterior
                                     ? 'border border-emerald-600/40 bg-emerald-950/20 hover:bg-emerald-900/30 hover:border-emerald-500/60'
                                     : 'border border-gray-700/40 hover:bg-gray-700/50'
                             }`}
                             title={agent.description}
                             disabled={isDisabled}
+                            style={{ scrollSnapAlign: 'start' }}
                         >
                             <agent.icon className={`w-5 h-5 transition-colors ${
                                 isExterior

@@ -2,6 +2,7 @@ import React from 'react';
 import { LogoIcon, PlusCircleIcon, LayoutGridIcon, ChevronLeftIcon, ChevronUpIcon, ChevronDownIcon, SparklesIcon } from './icons';
 import { Button } from './ui/Button';
 import { APP_NAME } from '../theme';
+import { UserProfileMenu } from '../src/components/UserProfileMenu';
 
 interface HeaderProps {
     onNewListing?: () => void;
@@ -67,6 +68,7 @@ export const Header: React.FC<HeaderProps> = ({
                 New Project
             </Button>
         )}
+        <UserProfileMenu />
       </div>
     </header>
   );

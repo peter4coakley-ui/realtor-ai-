@@ -5,6 +5,8 @@ import { interpretUserIntent, generateImageEdit, analyzeImageAndSuggestEdits, an
 import { scrapeListingUrl } from '../services/listingScraperService';
 import { applyWatermark } from '../utils/imageUtils';
 import { storageService } from '../services/storageService';
+import { useCredits as useCreditService, CREDIT_COSTS } from '../src/lib/credits';
+import { useCredits, CREDIT_COSTS } from '../src/lib/credits';
 
 
 interface PhotoMindState {
@@ -252,6 +254,18 @@ export const usePhotoMind = () => {
     }
 
     try {
+        const creditCost = CREDIT_COSTS.AI_EDIT;
+        const hasCredits = await useCreditService(creditCost, `AI Edit: ${prompt.substring(0, 50)}...`);
+
+        if (!hasCredits) {
+            setState(prev => ({
+                ...prev,
+                isLoading: false,
+                error: "Insufficient credits! Please purchase more credits to continue editing."
+            }));
+            return;
+        }
+
         const currentEditHistory = activeVersion.editHistory || [];
         const newEditHistory = [...currentEditHistory, prompt];
 

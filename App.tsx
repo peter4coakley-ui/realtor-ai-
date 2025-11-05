@@ -108,6 +108,7 @@ function AppContent() {
               onGoToProperty={handleGoToProperty}
               sendMessage={photoMind.sendMessage}
               onPresetSubmit={photoMind.handlePresetSubmit}
+              onEnhancePrompt={photoMind.handleEnhancePrompt}
               toggleSaveVersion={photoMind.toggleSaveVersion}
               addWatermark={photoMind.addWatermark}
               goToNextVersion={photoMind.goToNextVersion}

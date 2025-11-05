@@ -129,6 +129,7 @@ export class SupabaseService {
       type: v.version_type as ImageVersion['type'],
       timestamp: v.created_at,
       isSaved: v.is_saved,
+      editHistory: v.edit_history ? (Array.isArray(v.edit_history) ? v.edit_history : []) : undefined,
     }));
   }
 
@@ -175,7 +176,8 @@ export class SupabaseService {
     imageProjectId: string,
     storagePath: string,
     prompt: string,
-    versionType: ImageVersion['type']
+    versionType: ImageVersion['type'],
+    editHistory?: string[]
   ): Promise<string> {
     const { data, error } = await supabase
       .from('image_versions')
@@ -185,6 +187,7 @@ export class SupabaseService {
         prompt,
         version_type: versionType,
         is_saved: false,
+        edit_history: editHistory || null,
       })
       .select()
       .single();

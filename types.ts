@@ -14,8 +14,9 @@ export interface ImageVersion {
   prompt: string;
   type: 'original' | 'preset' | 'chat' | 'inpaint';
   timestamp: string;
-  isNew?: boolean; // For optimistic UI updates
-  isSaved?: boolean; // For saved/favorite versions
+  isNew?: boolean;
+  isSaved?: boolean;
+  editHistory?: string[];
 }
 
 export interface ImageProject {

@@ -152,3 +152,11 @@ export const CheckIcon: React.FC<{className?: string}> = (props) => (
 export const SparklesIcon: React.FC<{className?: string}> = (props) => (
     <Icon {...props}><path d="m12 3-1.9 5.8-5.8 1.9 5.8 1.9L12 18l1.9-5.8 5.8-1.9-5.8-1.9L12 3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></Icon>
 );
+
+export const EnhanceIcon: React.FC<{className?: string}> = (props) => (
+    <Icon {...props}>
+        <path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z" />
+        <path d="M12 8v8" />
+        <path d="M8 12h8" />
+    </Icon>
+);

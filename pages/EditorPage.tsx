@@ -16,6 +16,7 @@ interface EditorPageProps {
     onSelectImageProject: (imageProjectId: string) => void;
     sendMessage: (message: string, maskDataUrl?: string) => void;
     onPresetSubmit: (prompt: string, userMessage: string) => void;
+    onEnhancePrompt: (prompt: string) => Promise<string>;
     toggleSaveVersion: (versionId: string) => void;
     addWatermark: (versionId: string) => void;
     goToNextVersion: () => void;
@@ -33,6 +34,7 @@ const EditorPage: React.FC<EditorPageProps> = ({
     onSelectImageProject,
     sendMessage,
     onPresetSubmit,
+    onEnhancePrompt,
     toggleSaveVersion,
     addWatermark,
     goToNextVersion,
@@ -171,6 +173,7 @@ const EditorPage: React.FC<EditorPageProps> = ({
               messages={activeImageProject.chatHistory}
               onSendMessage={handleSendMessage}
               onPresetSubmit={onPresetSubmit}
+              onEnhancePrompt={onEnhancePrompt}
               isLoading={isLoading}
               isDisabled={false}
               style={isMobile ? {} : { width: `${chatPanelWidth}px` }}

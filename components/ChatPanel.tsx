@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { ChatMessage, EditAgent } from '../types';
-import { UserIcon, AssistantIcon, SendIcon, ChevronDownIcon, ChevronUpIcon, XCircleIcon, ExpandIcon, DownloadIcon, WatermarkIcon } from './icons';
+import { UserIcon, AssistantIcon, SendIcon, ChevronDownIcon, ChevronUpIcon, XCircleIcon, ExpandIcon, DownloadIcon, WatermarkIcon, EnhanceIcon } from './icons';
 import { Input } from './ui/Input';
 import { Button } from './ui/Button';
 import { Avatar } from './ui/Avatar';
@@ -77,6 +77,7 @@ interface ChatPanelProps {
   messages: ChatMessage[];
   onSendMessage: (message: string) => void;
   onPresetSubmit: (prompt: string, userMessage: string) => void;
+  onEnhancePrompt: (prompt: string) => Promise<string>;
   isLoading: boolean;
   isDisabled: boolean;
   style?: React.CSSProperties;
@@ -85,13 +86,14 @@ interface ChatPanelProps {
   onAddWatermark: (versionId: string) => void;
 }
 
-export const ChatPanel: React.FC<ChatPanelProps> = ({ 
-    messages, onSendMessage, onPresetSubmit, isLoading, isDisabled, style, 
+export const ChatPanel: React.FC<ChatPanelProps> = ({
+    messages, onSendMessage, onPresetSubmit, onEnhancePrompt, isLoading, isDisabled, style,
     onViewFullScreen, onDownloadImage, onAddWatermark
 }) => {
   const [input, setInput] = useState('');
   const [presetsVisible, setPresetsVisible] = useState(true);
   const [stagedPreset, setStagedPreset] = useState<EditAgent | null>(null);
+  const [isEnhancing, setIsEnhancing] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -109,16 +111,30 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
     setStagedPreset(null);
   };
 
+  const handleEnhance = async () => {
+    if (!input.trim() || isEnhancing || isLoading) return;
+
+    setIsEnhancing(true);
+    try {
+      const enhanced = await onEnhancePrompt(input.trim());
+      setInput(enhanced);
+    } catch (error) {
+      console.error('Failed to enhance prompt:', error);
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isLoading || isDisabled) return;
 
     if (stagedPreset) {
       if (stagedPreset.requiresInput && !input.trim()) return;
-      
+
       const finalPrompt = stagedPreset.prompt.replace('{userInput}', input.trim());
       const userMessage = `${stagedPreset.name}${input.trim() ? `: ${input.trim()}` : ''}`;
-      
+
       onPresetSubmit(finalPrompt, userMessage);
       setStagedPreset(null);
       setInput('');
@@ -190,7 +206,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         )}
         
         <div className="flex items-center gap-3">
-            <form onSubmit={handleSubmit} className="flex-grow flex items-center gap-3">
+            <form onSubmit={handleSubmit} className="flex-grow flex items-center gap-2">
                 <Input
                     type="text"
                     value={input}
@@ -199,7 +215,24 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                     disabled={isLoading || isDisabled}
                     className="flex-grow"
                 />
-                <Button type="submit" disabled={isSendDisabled}>
+                {!stagedPreset && (
+                    <Button
+                        type="button"
+                        onClick={handleEnhance}
+                        disabled={!input.trim() || isEnhancing || isLoading || isDisabled}
+                        variant="ghost"
+                        size="icon"
+                        className="flex-shrink-0 hover:bg-amber-600/20 border border-amber-600/40"
+                        title="Enhance your prompt with AI"
+                    >
+                        {isEnhancing ? (
+                            <div className="w-5 h-5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                            <EnhanceIcon className="w-5 h-5 text-amber-400" />
+                        )}
+                    </Button>
+                )}
+                <Button type="submit" disabled={isSendDisabled} className="flex-shrink-0">
                     <SendIcon className="w-5 h-5" />
                 </Button>
             </form>

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { ChatMessage, ImageVersion, EditAgent, PropertyListing, ImageProject } from '../types';
 import { fileToBase64, dataUrlToFile } from '../utils/fileUtils';
-import { interpretUserIntent, generateImageEdit, analyzeImageAndSuggestEdits, analyzeAndNameImage } from '../services/geminiService';
+import { interpretUserIntent, generateImageEdit, analyzeImageAndSuggestEdits, analyzeAndNameImage, enhanceUserPrompt } from '../services/geminiService';
 import { scrapeListingUrl } from '../services/listingScraperService';
 import { applyWatermark } from '../utils/imageUtils';
 
@@ -224,12 +224,11 @@ export const usePhotoMind = () => {
       });
   };
 
-  // Removed useCallback from handleAIEdit to ensure it always captures the latest state.
   const handleAIEdit = async (prompt: string, type: ImageVersion['type'], maskDataUrl?: string) => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-    const latestState = { ...state }; // Get a snapshot of the current state
-    
+    const latestState = { ...state };
+
     const activeProp = latestState.propertyListings.find(p => p.id === latestState.activePropertyId);
     const activeImageProject = activeProp?.imageProjects.find(ip => ip.id === latestState.activeImageProjectId);
 
@@ -245,14 +244,23 @@ export const usePhotoMind = () => {
     }
 
     try {
-        const resultDataUrl = await generateImageEdit(activeVersion.dataUrl, prompt, maskDataUrl);
-        
+        const currentEditHistory = activeVersion.editHistory || [];
+        const newEditHistory = [...currentEditHistory, prompt];
+
+        const resultDataUrl = await generateImageEdit(
+            activeVersion.dataUrl,
+            prompt,
+            maskDataUrl,
+            currentEditHistory
+        );
+
         const newVersion: ImageVersion = {
             id: `v-${Date.now()}`,
             dataUrl: resultDataUrl,
             prompt,
             type: type === 'chat' && maskDataUrl ? 'inpaint' : type,
             timestamp: new Date().toISOString(),
+            editHistory: newEditHistory,
         };
 
         const imageChatMessage: ChatMessage = {
@@ -262,11 +270,11 @@ export const usePhotoMind = () => {
             image: newVersion.dataUrl,
             versionId: newVersion.id,
         };
-        
+
         let messagesToAdd = [imageChatMessage];
 
         try {
-          const suggestionText = await analyzeImageAndSuggestEdits(resultDataUrl);
+          const suggestionText = await analyzeImageAndSuggestEdits(resultDataUrl, newEditHistory);
           const suggestionMessage: ChatMessage = {
             id: `msg-sugg-${Date.now()}`,
             role: 'assistant',
@@ -275,7 +283,6 @@ export const usePhotoMind = () => {
           messagesToAdd.push(suggestionMessage);
         } catch (analysisError) {
             console.error("Failed to get image suggestions:", analysisError);
-            // Silently fail, just don't add the suggestion message.
         }
 
         setState(prev => {
@@ -490,6 +497,32 @@ export const usePhotoMind = () => {
         return { ...prev, propertyListings: updatedListings };
     });
   }, []);
+
+  const handleEnhancePrompt = useCallback(async (prompt: string): Promise<string> => {
+    if (!state.activePropertyId || !state.activeImageProjectId) {
+      return prompt;
+    }
+
+    const activeProp = state.propertyListings.find(p => p.id === state.activePropertyId);
+    const activeImageProject = activeProp?.imageProjects.find(ip => ip.id === state.activeImageProjectId);
+
+    if (!activeImageProject) {
+      return prompt;
+    }
+
+    const chatHistory = activeImageProject.chatHistory.map(msg => ({
+      role: msg.role,
+      content: msg.content
+    }));
+
+    try {
+      const enhanced = await enhanceUserPrompt(prompt, chatHistory);
+      return enhanced;
+    } catch (error) {
+      console.error('Failed to enhance prompt:', error);
+      return prompt;
+    }
+  }, [state.activePropertyId, state.activeImageProjectId, state.propertyListings]);
   
   // Expose the active version index for the editor to use
   const activeImageProject = state.propertyListings.find(p => p.id === state.activePropertyId)?.imageProjects.find(ip => ip.id === state.activeImageProjectId);
@@ -502,6 +535,7 @@ export const usePhotoMind = () => {
     addImageProjectsToProperty,
     sendMessage,
     handlePresetSubmit,
+    handleEnhancePrompt,
     setActiveProperty,
     setActiveImageProject,
     toggleSaveVersion,

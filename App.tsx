@@ -85,7 +85,7 @@ function AppContent() {
     setView('landing');
   };
 
-  const activeProperty = photoMind.state.propertyListings.find(p => p.id === photoMind.state.activePropertyId);
+  const activeProperty = photoMind.state.projects.find(p => p.id === photoMind.state.activeProjectId);
   const activeImageProject = activeProperty?.imageProjects.find(ip => ip.id === photoMind.state.activeImageProjectId);
 
   const renderContent = () => {
@@ -120,7 +120,7 @@ function AppContent() {
         }
         return (
           <HomePage
-            propertyListings={photoMind.state.propertyListings}
+            propertyListings={photoMind.state.projects}
             onCreateProperty={handleCreateProperty}
             onSelectProperty={handleSelectProperty}
             onImportFromUrl={handleImportFromUrl}
@@ -145,7 +145,7 @@ function AppContent() {
         }
         return (
           <HomePage
-            propertyListings={photoMind.state.propertyListings}
+            propertyListings={photoMind.state.projects}
             onCreateProperty={handleCreateProperty}
             onSelectProperty={handleSelectProperty}
             onImportFromUrl={handleImportFromUrl}
@@ -158,7 +158,7 @@ function AppContent() {
       default:
         return (
           <HomePage
-            propertyListings={photoMind.state.propertyListings}
+            propertyListings={photoMind.state.projects}
             onCreateProperty={handleCreateProperty}
             onSelectProperty={handleSelectProperty}
             onImportFromUrl={handleImportFromUrl}

@@ -1,31 +1,32 @@
 # PropertyLens AI
 
-Professional AI-powered real estate photo editing platform that transforms ordinary listings into stunning marketing materials. Built for realtors, photographers, and agencies.
+Professional AI-powered photo editing platform that transforms ordinary images into stunning visual content. Built for creative professionals, photographers, and visual artists.
 
 ## Features
 
 ### Core Editing Capabilities
-- **Virtual Staging**: Instantly clear rooms and add professional furnishings
+- **Room Transformation**: Completely clear and redesign rooms with full creative freedom
 - **Twilight Conversions**: Transform daytime photos into stunning twilight shots
-- **Sky & Lawn Enhancement**: Perfect blue skies and lush green lawns with one click
-- **AI Chat Editing**: Natural language editing - just describe what you want
-- **Flooring & Wall Repainting**: Change flooring and wall colors realistically
-- **Declutter & Repair**: Remove small distracting items and fix minor imperfections
+- **Scene Enhancement**: Perfect skies, vibrant landscaping, and dramatic improvements
+- **AI Chat Editing**: Natural language editing - describe any modification you want
+- **Material Replacements**: Change flooring, walls, exteriors with photorealistic results
+- **Advanced Retouching**: Remove objects, fix imperfections, add/modify elements
+- **Structural Modifications**: Add windows, remove walls, change architecture as desired
 
 ### Platform Features
-- **MLS Compliant**: All edits follow NAR and MLS guidelines
+- **Unrestricted Creativity**: Full creative freedom for any type of edit or transformation
 - **Authentication**: Secure user authentication with Supabase
 - **Multi-tier Subscriptions**: Free, Pro, and Enterprise plans
 - **Usage Tracking**: Monitor edit usage and subscription limits
-- **Property Management**: Organize photos by property listing
-- **Version History**: Track all editing iterations
-- **Responsive Design**: Mobile-friendly interface
+- **Project Management**: Organize photos by project or property
+- **Version History**: Track all editing iterations with complete history
+- **Responsive Design**: Mobile-friendly interface for editing on any device
 - **Batch Processing**: Edit multiple photos simultaneously (Pro+)
 
 ## Technology Stack
 
 - **Frontend**: React 19, TypeScript, Tailwind CSS
-- **AI**: Google Gemini 2.5 Flash for image generation
+- **AI**: Google Gemini 2.5 Flash Image for photorealistic generation
 - **Backend**: Supabase (PostgreSQL, Authentication, Storage)
 - **Payments**: Stripe (ready for integration)
 - **Build Tool**: Vite
@@ -60,8 +61,8 @@ npm run dev
 The database migrations are already applied. The schema includes:
 
 - **profiles**: User profiles with subscription information
-- **properties**: Real estate properties
-- **image_projects**: Individual images within properties
+- **properties**: Projects or property collections
+- **image_projects**: Individual images within projects
 - **image_versions**: Different edited versions of images
 - **chat_messages**: AI conversation history
 - **usage_logs**: Track API usage for billing
@@ -73,7 +74,7 @@ Supabase Storage bucket `property-images` is configured with:
 - 10MB file size limit
 - Allowed formats: JPG, PNG, WEBP
 - User-scoped access control
-- Organized by: `{user_id}/{property_id}/{image_project_id}/{version_id}.png`
+- Organized by: `{user_id}/{project_id}/{image_project_id}/{version_id}.png`
 
 ## Project Structure
 
@@ -93,8 +94,8 @@ project/
 ├── pages/              # Page components
 │   ├── LandingPage.tsx # Marketing landing page
 │   ├── AuthPage.tsx    # Sign in/up
-│   ├── HomePage.tsx    # Property dashboard
-│   ├── PropertyPage.tsx # Property photos view
+│   ├── HomePage.tsx    # Project dashboard
+│   ├── PropertyPage.tsx # Project photos view
 │   ├── EditorPage.tsx  # Photo editor
 │   └── SettingsPage.tsx # Account settings
 ├── services/           # API services
@@ -136,10 +137,11 @@ project/
 
 The platform uses advanced prompt engineering for professional results:
 
-- **MLS Compliance**: Prompts include strict constraints against structural alterations
+- **Creative Freedom**: Prompts support any type of modification including structural changes
 - **Photorealism**: Emphasis on natural lighting, shadows, and texture preservation
 - **Quality Control**: Multi-step validation for professional-grade output
-- **Context Awareness**: Prompts adapt based on image type (interior/exterior)
+- **Context Awareness**: Prompts adapt based on image type and edit complexity
+- **Cumulative Editing**: Intelligent preservation of previous edits while adding new modifications
 
 ## Stripe Integration
 
@@ -155,11 +157,11 @@ Integration points are marked in the code with placeholder functions.
 ## Mobile Responsiveness
 
 The platform is fully responsive with:
-- Mobile-optimized navigation
-- Touch-friendly editing controls
-- Collapsible chat panel on mobile
+- Mobile-optimized navigation and interface
+- Touch-friendly editing controls and gestures
+- Collapsible chat panel on mobile devices
 - Responsive grid layouts (5 columns → 1 column)
-- Mobile-first Tailwind breakpoints
+- Mobile-first Tailwind CSS breakpoints
 
 ## SEO & LLMO Optimization
 
@@ -206,7 +208,7 @@ npm run preview
 
 ## Contributing
 
-This project follows professional real estate photography standards and MLS compliance guidelines. All contributions must maintain these standards.
+This project follows professional photography standards and quality guidelines. All contributions must maintain photorealistic output quality and seamless editing capabilities.
 
 ## License
 
@@ -218,4 +220,4 @@ For support, email support@propertylens.ai or visit our help center.
 
 ---
 
-Built with ❤️ for real estate professionals
+Built with ❤️ for creative professionals and visual artists

@@ -2,47 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { Button } from '../components/ui/Button'
+import { AppLayout } from '../components/AppLayout'
 
 export function Landing() {
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-teal-900">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-6">
-          <div className="flex items-center gap-3">
-            <svg className="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-            </svg>
-            <h1 className="text-2xl font-bold text-white">PropertyLens AI</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            {user ? (
-              <>
-                <span className="text-sm text-gray-300">{user.email}</span>
-                <Link to="/settings">
-                  <Button variant="outline">Settings</Button>
-                </Link>
-                <Link to="/app">
-                  <Button>Launch App</Button>
-                </Link>
-                <Button variant="outline" onClick={signOut}>
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link to="/login">
-                  <Button variant="outline">Sign In</Button>
-                </Link>
-                <Link to="/signup">
-                  <Button>Sign Up</Button>
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
+    <AppLayout showBreadcrumbs={false} showActions={true} className="bg-gradient-to-br from-gray-900 via-gray-800 to-teal-900">
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <section className="py-20 lg:py-28">
@@ -210,6 +176,6 @@ export function Landing() {
           </div>
         </div>
       </footer>
-    </div>
+    </AppLayout>
   )
 }

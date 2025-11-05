@@ -8,7 +8,7 @@ import { Button } from '../components/ui/Button';
 const MAIN_FILE_INPUT_ID = 'main-image-upload';
 
 interface HomePageProps {
-  projects: Project[];
+  propertyListings: Project[];
   onCreateProperty: (files: File[]) => void;
   onSelectProperty: (propertyId: string) => void;
   onImportFromUrl: (url: string) => void;
@@ -35,7 +35,7 @@ const PropertyCard: React.FC<{ property: Project, onSelect: () => void }> = ({ p
   );
 };
 
-const HomePage: React.FC<HomePageProps> = ({ projects, onCreateProperty, onSelectProperty, onImportFromUrl, isLoading, error }) => {
+const HomePage: React.FC<HomePageProps> = ({ propertyListings: projects, onCreateProperty, onSelectProperty, onImportFromUrl, isLoading, error }) => {
   const [urlInput, setUrlInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 

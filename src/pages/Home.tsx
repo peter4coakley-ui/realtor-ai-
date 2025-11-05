@@ -13,9 +13,14 @@ export function Home() {
           <h1 className="text-2xl font-bold text-gray-900">PropertyLens AI</h1>
           <div className="space-x-4">
             {user ? (
-              <Link to="/dashboard">
-                <Button>Dashboard</Button>
-              </Link>
+              <>
+                <Link to="/app">
+                  <Button>Launch App</Button>
+                </Link>
+                <Link to="/dashboard">
+                  <Button variant="outline">Dashboard</Button>
+                </Link>
+              </>
             ) : (
               <>
                 <Link to="/login">
@@ -38,11 +43,16 @@ export function Home() {
               Professional real estate image editing powered by advanced AI technology. 
               Perfect for agents, photographers, and property managers.
             </p>
-            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 space-x-4">
               {user ? (
-                <Link to="/dashboard">
-                  <Button size="lg">Go to Dashboard</Button>
-                </Link>
+                <>
+                  <Link to="/app">
+                    <Button size="lg">Launch App</Button>
+                  </Link>
+                  <Link to="/dashboard">
+                    <Button size="lg" variant="outline">Dashboard</Button>
+                  </Link>
+                </>
               ) : (
                 <Link to="/signup">
                   <Button size="lg">Get Started</Button>

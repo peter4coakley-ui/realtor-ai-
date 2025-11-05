@@ -137,19 +137,35 @@ export async function generateImageEdit(
             },
         };
         parts.push(maskPart);
-        // Provide a more explicit prompt for inpainting
         finalPrompt = `You are an expert photo editor. A user has provided an image and a mask. Your task is to apply a specific edit ONLY to the area indicated by the white parts of the mask. The rest of the image must remain completely unchanged.
+
+IMPORTANT: The provided image is the CURRENT STATE with all previous edits. Keep everything that already exists in this image exactly as it is.
+
 The user's request is: "${prompt}"`;
+    } else {
+        finalPrompt = `IMPORTANT: The provided image is the CURRENT STATE with all previous edits already applied. You must preserve everything that is already in this image and ONLY add the new modification requested below.
+
+User's new request: ${prompt}`;
     }
 
     parts.push({ text: finalPrompt });
 
-    const systemInstruction = `You are an AI image generation model specializing in photorealistic real estate photo editing.
-**CRITICAL RULES:**
-1.  **Adhere Strictly to the Prompt:** Your primary goal is to execute the user's prompt as precisely as possible.
-2.  **Prioritize Photorealism Above All:** The final image must be indistinguishable from a real photograph. Pay close attention to lighting, shadows, textures, and perspective.
-3.  **Preserve Unspecified Areas:** Unless explicitly told to change something, you must preserve it perfectly. Do not "creatively" alter parts of the image that were not mentioned in the prompt.
-4.  **Maintain Structural Integrity:** Do not alter the physical structure of buildings (walls, windows, roofs) unless that is the explicit and clear instruction of the prompt.`;
+    const systemInstruction = `You are an AI image generation model specializing in photorealistic real estate photo editing that maintains perfect continuity across multiple generations.
+
+**CRITICAL RULES FOR CUMULATIVE EDITING:**
+1.  **THIS IMAGE IS YOUR BASE:** The image provided is the CURRENT STATE with all previous edits already applied. You must treat it as your starting point and foundation.
+2.  **PRESERVE ALL EXISTING EDITS:** This image contains modifications from previous generations. You MUST keep every single element, object, color, and change that is already present in this current image.
+3.  **APPLY ONLY THE NEW REQUEST:** Your job is to add ONLY the newly requested modification on top of what already exists. Do not remove, revert, or alter any previous edits unless explicitly instructed.
+4.  **NEVER RESET TO ORIGINAL:** Do not attempt to "start fresh" or revert to an earlier version. Always build upon the exact image provided.
+5.  **Adhere Strictly to the Prompt:** Execute the user's NEW prompt precisely while maintaining everything else from the current image.
+6.  **Prioritize Photorealism Above All:** The final image must be indistinguishable from a real photograph with seamless integration of the new edit.
+7.  **Maintain Structural Integrity:** Do not alter the physical structure of buildings (walls, windows, roofs) unless that is the explicit and clear instruction of the prompt.
+
+**Example Workflow:**
+- Current image shows: Red sofa, blue walls
+- New request: "Add a plant"
+- Output: Red sofa (kept), blue walls (kept), plant (added)
+- WRONG: Original furniture returns, blue walls disappear`;
 
     const response: GenerateContentResponse = await ai.models.generateContent({
         model: 'gemini-2.5-flash-image',

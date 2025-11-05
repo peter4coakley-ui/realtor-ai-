@@ -4,7 +4,7 @@ import { useAuth } from '../lib/auth'
 import { Button } from '../components/ui/Button'
 
 export function Home() {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-teal-900">
@@ -19,12 +19,16 @@ export function Home() {
           <div className="flex items-center gap-4">
             {user ? (
               <>
+                <span className="text-sm text-gray-300">{user.email}</span>
                 <Link to="/dashboard">
                   <Button variant="outline">Dashboard</Button>
                 </Link>
                 <Link to="/app">
                   <Button>Launch App</Button>
                 </Link>
+                <Button variant="outline" onClick={signOut}>
+                  Sign Out
+                </Button>
               </>
             ) : (
               <>

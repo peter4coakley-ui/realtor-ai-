@@ -19,11 +19,11 @@ export function Home() {
           <div className="flex items-center gap-4">
             {user ? (
               <>
-                <Link to="/app">
-                  <Button>Launch App</Button>
-                </Link>
                 <Link to="/dashboard">
                   <Button variant="outline">Dashboard</Button>
+                </Link>
+                <Link to="/app">
+                  <Button>Launch App</Button>
                 </Link>
               </>
             ) : (
@@ -55,14 +55,14 @@ export function Home() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               {user ? (
                 <>
-                  <Link to="/app">
-                    <Button size="lg" className="text-lg px-8 py-4">
-                      Launch App
-                    </Button>
-                  </Link>
                   <Link to="/dashboard">
                     <Button size="lg" variant="outline" className="text-lg px-8 py-4">
                       View Dashboard
+                    </Button>
+                  </Link>
+                  <Link to="/app">
+                    <Button size="lg" className="text-lg px-8 py-4">
+                      Launch App
                     </Button>
                   </Link>
                 </>

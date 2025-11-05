@@ -13,7 +13,7 @@ interface Subscription {
   cancel_at_period_end: boolean
 }
 
-export function Dashboard() {
+export function Settings() {
   const { user, signOut } = useAuth()
   const [subscription, setSubscription] = useState<Subscription | null>(null)
   const [loading, setLoading] = useState(true)
@@ -66,7 +66,7 @@ export function Dashboard() {
         body: JSON.stringify({
           price_id: priceId,
           success_url: `${window.location.origin}/success`,
-          cancel_url: `${window.location.origin}/dashboard`,
+          cancel_url: `${window.location.origin}/settings`,
           mode,
         }),
       })
@@ -115,7 +115,7 @@ export function Dashboard() {
                 </svg>
                 <span className="text-2xl font-bold text-white">PropertyLens AI</span>
               </div>
-              <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+              <h1 className="text-3xl font-bold text-white">Account Settings</h1>
               <p className="text-gray-300">Welcome back, {user?.email}</p>
             </div>
             <div className="flex gap-2">

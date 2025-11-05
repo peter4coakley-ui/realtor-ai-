@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { Button } from '../components/ui/Button'
 
-export function Home() {
+export function Landing() {
   const { user, signOut } = useAuth()
 
   return (
@@ -20,8 +20,8 @@ export function Home() {
             {user ? (
               <>
                 <span className="text-sm text-gray-300">{user.email}</span>
-                <Link to="/dashboard">
-                  <Button variant="outline">Dashboard</Button>
+                <Link to="/settings">
+                  <Button variant="outline">Settings</Button>
                 </Link>
                 <Link to="/app">
                   <Button>Launch App</Button>
@@ -59,9 +59,9 @@ export function Home() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               {user ? (
                 <>
-                  <Link to="/dashboard">
+                  <Link to="/settings">
                     <Button size="lg" variant="outline" className="text-lg px-8 py-4">
-                      View Dashboard
+                      View Settings
                     </Button>
                   </Link>
                   <Link to="/app">

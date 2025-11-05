@@ -35,7 +35,7 @@ const PropertyCard: React.FC<{ property: Project, onSelect: () => void }> = ({ p
   );
 };
 
-const HomePage: React.FC<HomePageProps> = ({ propertyListings: projects, onCreateProperty, onSelectProperty, onImportFromUrl, isLoading, error }) => {
+const AppDashboard: React.FC<HomePageProps> = ({ propertyListings: projects, onCreateProperty, onSelectProperty, onImportFromUrl, isLoading, error }) => {
   const [urlInput, setUrlInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -149,4 +149,4 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings: projects, onCreat
   );
 };
 
-export default HomePage;
+export default AppDashboard;

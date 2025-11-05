@@ -1,39 +1,40 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './lib/auth'
 import { ProtectedRoute } from './components/ProtectedRoute'
-import { Home } from './pages/Home'
+import { Landing } from './pages/Landing'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
-import { Dashboard } from './pages/Dashboard'
+import { Settings } from './pages/Settings'
 import { Success } from './pages/Success'
-import PropertyLensApp from '../App'
+import { AppWrapper } from './pages/AppWrapper'
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/success" element={<Success />} />
           <Route
-            path="/dashboard"
+            path="/settings"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Settings />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/app"
+            path="/app/*"
             element={
               <ProtectedRoute>
-                <PropertyLensApp />
+                <AppWrapper />
               </ProtectedRoute>
             }
           />
+          <Route path="/dashboard" element={<Navigate to="/app" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

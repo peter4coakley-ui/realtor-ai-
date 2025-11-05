@@ -104,13 +104,19 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-teal-900">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600">Welcome back, {user?.email}</p>
+              <div className="flex items-center gap-3 mb-2">
+                <svg className="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span className="text-2xl font-bold text-white">PropertyLens AI</span>
+              </div>
+              <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+              <p className="text-gray-300">Welcome back, {user?.email}</p>
             </div>
             <div className="flex gap-2">
               <Link to="/app">
@@ -129,53 +135,53 @@ export function Dashboard() {
           )}
 
           {/* Current Subscription */}
-          <div className="bg-white shadow rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Current Plan</h2>
+          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 shadow rounded-2xl p-6 mb-8">
+            <h2 className="text-xl font-semibold text-white mb-4">Current Plan</h2>
             {currentPlan ? (
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900">{currentPlan.name}</h3>
-                  <p className="text-gray-600">{currentPlan.description}</p>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="text-lg font-medium text-white">{currentPlan.name}</h3>
+                  <p className="text-gray-300">{currentPlan.description}</p>
+                  <p className="text-sm text-gray-400">
                     {formatPrice(currentPlan.price, currentPlan.currency)}/month
                   </p>
                   {subscription?.current_period_end && (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-400">
                       {subscription.cancel_at_period_end ? 'Cancels' : 'Renews'} on{' '}
                       {new Date(subscription.current_period_end * 1000).toLocaleDateString()}
                     </p>
                   )}
                 </div>
                 <div className="text-right">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-500/20 text-teal-400 border border-teal-500/30">
                     {subscription?.subscription_status === 'active' ? 'Active' : subscription?.subscription_status}
                   </span>
                 </div>
               </div>
             ) : (
-              <p className="text-gray-600">No active subscription</p>
+              <p className="text-gray-300">No active subscription</p>
             )}
           </div>
 
           {/* Available Plans */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Available Plans</h2>
+          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 shadow rounded-2xl p-6">
+            <h2 className="text-xl font-semibold text-white mb-6">Available Plans</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {stripeProducts.map((product) => (
-                <div key={product.id} className="border border-gray-200 rounded-lg p-6">
+                <div key={product.id} className="border border-gray-700 rounded-2xl p-6 hover:border-teal-500 transition-all">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
+                    <h3 className="text-lg font-medium text-white">{product.name}</h3>
                     {currentPlan?.id === product.id && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-500/20 text-teal-400 border border-teal-500/30">
                         Current
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-600 mb-4">{product.description}</p>
+                  <p className="text-gray-300 mb-4">{product.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-gray-900">
+                    <span className="text-2xl font-bold text-white">
                       {formatPrice(product.price, product.currency)}
-                      <span className="text-sm font-normal text-gray-500">
+                      <span className="text-sm font-normal text-gray-400">
                         /{product.mode === 'subscription' ? 'month' : 'one-time'}
                       </span>
                     </span>

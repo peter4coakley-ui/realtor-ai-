@@ -4,6 +4,7 @@ import { fileToBase64, dataUrlToFile } from '../utils/fileUtils';
 import { interpretUserIntent, generateImageEdit, analyzeImageAndSuggestEdits, analyzeAndNameImage, enhanceUserPrompt } from '../services/geminiService';
 import { scrapeListingUrl } from '../services/listingScraperService';
 import { applyWatermark } from '../utils/imageUtils';
+import { storageService } from '../services/storageService';
 
 
 interface PhotoMindState {
@@ -17,15 +18,22 @@ interface PhotoMindState {
 }
 
 export const usePhotoMind = () => {
-  const [state, setState] = useState<PhotoMindState>({
-    projects: [],
-    activeProjectId: null,
-    activeImageProjectId: null,
-    activeVersionIndex: 0,
-    isLoading: false,
-    error: null,
-    lastViewedVersions: {},
+  const [state, setState] = useState<PhotoMindState>(() => {
+    const loadedProjects = storageService.loadProjects();
+    return {
+      projects: loadedProjects,
+      activeProjectId: null,
+      activeImageProjectId: null,
+      activeVersionIndex: 0,
+      isLoading: false,
+      error: null,
+      lastViewedVersions: {},
+    };
   });
+
+  useEffect(() => {
+    storageService.saveProjects(state.projects);
+  }, [state.projects]);
 
   const createPropertyFromFiles = useCallback(async (files: File[]): Promise<string | undefined> => {
     if (files.length === 0) return;

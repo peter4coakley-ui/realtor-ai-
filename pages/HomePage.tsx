@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import type { PropertyListing } from '../types';
+import type { Project } from '../types';
 import { Header } from '../components/Header';
 import { UploadIcon, LinkIcon } from '../components/icons';
 import { Input } from '../components/ui/Input';
@@ -8,7 +8,7 @@ import { Button } from '../components/ui/Button';
 const MAIN_FILE_INPUT_ID = 'main-image-upload';
 
 interface HomePageProps {
-  propertyListings: PropertyListing[];
+  projects: Project[];
   onCreateProperty: (files: File[]) => void;
   onSelectProperty: (propertyId: string) => void;
   onImportFromUrl: (url: string) => void;
@@ -16,7 +16,7 @@ interface HomePageProps {
   error: string | null;
 }
 
-const PropertyCard: React.FC<{ property: PropertyListing, onSelect: () => void }> = ({ property, onSelect }) => {
+const PropertyCard: React.FC<{ property: Project, onSelect: () => void }> = ({ property, onSelect }) => {
   const firstImageProject = property.imageProjects[0];
   const savedVersion = firstImageProject?.versions.find(v => v.isSaved);
   const coverImage = savedVersion || firstImageProject?.versions[0];
@@ -24,18 +24,18 @@ const PropertyCard: React.FC<{ property: PropertyListing, onSelect: () => void }
   return (
     <button onClick={onSelect} className="group relative block w-full aspect-[4/3] rounded-lg overflow-hidden bg-gray-800 hover:ring-2 hover:ring-teal-500 transition-all duration-200">
       {coverImage && (
-        <img src={coverImage.dataUrl} alt={property.address} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+        <img src={coverImage.dataUrl} alt={property.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
       <div className="absolute bottom-0 left-0 p-4 w-full">
-        <h3 className="text-white font-semibold truncate" title={property.address}>{property.address}</h3>
+        <h3 className="text-white font-semibold truncate" title={property.name}>{property.name}</h3>
         <p className="text-sm text-gray-300">{property.imageProjects.length} photo{property.imageProjects.length !== 1 ? 's' : ''}</p>
       </div>
     </button>
   );
 };
 
-const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty, onSelectProperty, onImportFromUrl, isLoading, error }) => {
+const HomePage: React.FC<HomePageProps> = ({ projects, onCreateProperty, onSelectProperty, onImportFromUrl, isLoading, error }) => {
   const [urlInput, setUrlInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -58,9 +58,9 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty,
   };
   
   const filteredListings = useMemo(() => {
-    if (!searchTerm) return propertyListings;
-    return propertyListings.filter(p => p.address.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [propertyListings, searchTerm]);
+    if (!searchTerm) return projects;
+    return projects.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [projects, searchTerm]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-gray-200">
@@ -78,8 +78,8 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty,
             <div className="flex flex-col items-center justify-center h-full">
                 <div className="text-center p-8">
                     <div className="w-16 h-16 border-4 border-dashed border-teal-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                    <h2 className="mt-4 text-2xl font-bold">Importing Property...</h2>
-                    <p className="mt-2 text-gray-400">Please wait while we fetch the property details and images.</p>
+                    <h2 className="mt-4 text-2xl font-bold">Importing Project...</h2>
+                    <p className="mt-2 text-gray-400">Please wait while we fetch the project details and images.</p>
                 </div>
             </div>
         )}
@@ -92,12 +92,12 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty,
                 </div>
             </div>
         )}
-        {!isLoading && !error && propertyListings.length === 0 && (
+        {!isLoading && !error && projects.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full">
             <div className="text-center p-8 border-2 border-dashed border-gray-600 rounded-2xl max-w-2xl mx-auto">
               <UploadIcon className="w-16 h-16 mx-auto text-gray-500" />
               <h2 className="mt-4 text-3xl font-bold">Welcome to PropertyLens AI</h2>
-              <p className="mt-2 text-gray-400">Create your first property by uploading photos or importing from a web link.</p>
+              <p className="mt-2 text-gray-400">Create your first project by uploading photos or importing from a web link.</p>
               <label htmlFor={MAIN_FILE_INPUT_ID} className="mt-6 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg cursor-pointer transition-colors">
                 Select Images to Start
               </label>
@@ -107,7 +107,7 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty,
                     type="url"
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
-                    placeholder="Paste a listing URL (e.g., Zillow, Redfin)"
+                    placeholder="Paste a URL to import images from"
                     className="w-full sm:w-80"
                     disabled={isLoading}
                 />
@@ -119,13 +119,13 @@ const HomePage: React.FC<HomePageProps> = ({ propertyListings, onCreateProperty,
             </div>
           </div>
         )}
-        {!isLoading && !error && propertyListings.length > 0 && (
+        {!isLoading && !error && projects.length > 0 && (
           <div>
             <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
-                <h1 className="text-3xl font-bold">Your Properties</h1>
+                <h1 className="text-3xl font-bold">Your Projects</h1>
                 <Input 
                     type="search"
-                    placeholder="Search by address..."
+                    placeholder="Search by project name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full sm:w-64"

@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import type { PropertyListing, ImageProject, ImageVersion, ChatMessage } from '../types';
+import type { Project, ImageProject, ImageVersion, ChatMessage } from '../types';
 
 export class SupabaseService {
   static async uploadImage(file: Blob, path: string): Promise<string> {
@@ -35,12 +35,12 @@ export class SupabaseService {
     if (error) throw error;
   }
 
-  static async createProperty(userId: string, address: string): Promise<string> {
+  static async createProject(userId: string, name: string): Promise<string> {
     const { data, error } = await supabase
       .from('properties')
       .insert({
         user_id: userId,
-        address,
+        address: name,
         status: 'active',
       })
       .select()
@@ -50,7 +50,7 @@ export class SupabaseService {
     return data.id;
   }
 
-  static async getProperties(userId: string): Promise<PropertyListing[]> {
+  static async getProjects(userId: string): Promise<Project[]> {
     const { data: properties, error } = await supabase
       .from('properties')
       .select(`
@@ -73,7 +73,7 @@ export class SupabaseService {
         const imageProjects = await this.getImageProjects(property.id);
         return {
           id: property.id,
-          address: property.address,
+          name: property.address,
           imageProjects,
         };
       })
@@ -221,10 +221,10 @@ export class SupabaseService {
     if (error) throw error;
   }
 
-  static async updatePropertyAddress(propertyId: string, newAddress: string): Promise<void> {
+  static async updateProjectName(propertyId: string, newName: string): Promise<void> {
     const { error } = await supabase
       .from('properties')
-      .update({ address: newAddress })
+      .update({ address: newName })
       .eq('id', propertyId);
 
     if (error) throw error;

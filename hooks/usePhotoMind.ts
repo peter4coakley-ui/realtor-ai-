@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import type { ChatMessage, ImageVersion, EditAgent, PropertyListing, ImageProject } from '../types';
+import type { ChatMessage, ImageVersion, EditAgent, Project, ImageProject } from '../types';
 import { fileToBase64, dataUrlToFile } from '../utils/fileUtils';
 import { interpretUserIntent, generateImageEdit, analyzeImageAndSuggestEdits, analyzeAndNameImage, enhanceUserPrompt } from '../services/geminiService';
 import { scrapeListingUrl } from '../services/listingScraperService';
@@ -7,8 +7,8 @@ import { applyWatermark } from '../utils/imageUtils';
 
 
 interface PhotoMindState {
-  propertyListings: PropertyListing[];
-  activePropertyId: string | null;
+  projects: Project[];
+  activeProjectId: string | null;
   activeImageProjectId: string | null;
   activeVersionIndex: number;
   isLoading: boolean;
@@ -18,8 +18,8 @@ interface PhotoMindState {
 
 export const usePhotoMind = () => {
   const [state, setState] = useState<PhotoMindState>({
-    propertyListings: [],
-    activePropertyId: null,
+    projects: [],
+    activeProjectId: null,
     activeImageProjectId: null,
     activeVersionIndex: 0,
     isLoading: false,
@@ -33,8 +33,8 @@ export const usePhotoMind = () => {
 
     try {
         const timestamp = Date.now();
-        const newPropertyId = `prop-${timestamp}`;
-        const address = files[0].name.split('.').slice(0, -1).join('.') || `New Property ${state.propertyListings.length + 1}`;
+        const newProjectId = `prop-${timestamp}`;
+        const name = files[0].name.split('.').slice(0, -1).join('.') || `New Property ${state.projects.length + 1}`;
         
         const imageProjectsPromises = files.map(async (file, index) => {
             const dataUrl = await fileToBase64(file);
@@ -70,24 +70,24 @@ export const usePhotoMind = () => {
 
         const newImageProjects = await Promise.all(imageProjectsPromises);
 
-        const newProperty: PropertyListing = {
-            id: newPropertyId,
-            address,
+        const newProperty: Project = {
+            id: newProjectId,
+            name,
             imageProjects: newImageProjects,
         };
         
         setState(prev => ({
             ...prev,
-            propertyListings: [...prev.propertyListings, newProperty],
+            projects: [...prev.projects, newProperty],
             isLoading: false,
         }));
-        return newPropertyId;
+        return newProjectId;
 
     } catch (error) {
         console.error("Failed to create property", error);
         setState(prev => ({ ...prev, isLoading: false, error: "Failed to process one or more images."}));
     }
-  }, [state.propertyListings.length]);
+  }, [state.projects.length]);
 
   const importFromUrl = async (url: string): Promise<string | undefined> => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
@@ -98,20 +98,20 @@ export const usePhotoMind = () => {
         const files = await Promise.all(filePromises);
 
         // This function will create ONE property with all the images inside it.
-        const newPropertyId = await createPropertyFromFiles(files);
-        if (newPropertyId) {
+        const newProjectId = await createPropertyFromFiles(files);
+        if (newProjectId) {
             setState(prev => {
-                const newProp = prev.propertyListings.find(p => p.id === newPropertyId);
+                const newProp = prev.projects.find(p => p.id === newProjectId);
                 if (newProp) {
                     return {
                         ...prev,
-                        propertyListings: prev.propertyListings.map(p => p.id === newPropertyId ? { ...p, address: scrapedData.address } : p)
+                        projects: prev.projects.map(p => p.id === newProjectId ? { ...p, name: scrapedData.name } : p)
                     }
                 }
                 return prev;
             });
         }
-        return newPropertyId;
+        return newProjectId;
 
 
     } catch (error) {
@@ -160,13 +160,13 @@ export const usePhotoMind = () => {
         const newImageProjects = await Promise.all(imageProjectsPromises);
 
         setState(prev => {
-            const updatedListings = prev.propertyListings.map(prop => {
+            const updatedListings = prev.projects.map(prop => {
                 if (prop.id === propertyId) {
                     return { ...prop, imageProjects: [...prop.imageProjects, ...newImageProjects] };
                 }
                 return prop;
             });
-            return { ...prev, propertyListings: updatedListings, isLoading: false };
+            return { ...prev, projects: updatedListings, isLoading: false };
         });
 
       } catch (error) {
@@ -178,7 +178,7 @@ export const usePhotoMind = () => {
   const setActiveProperty = useCallback((propertyId: string | null) => {
     setState(prev => ({
         ...prev,
-        activePropertyId: propertyId,
+        activeProjectId: propertyId,
         activeImageProjectId: null, // Reset active image when changing property
         activeVersionIndex: 0,
     }));
@@ -186,7 +186,7 @@ export const usePhotoMind = () => {
 
   const setActiveImageProject = useCallback((imageProjectId: string) => {
     setState(prev => {
-        const activeProperty = prev.propertyListings.find(p => p.id === prev.activePropertyId);
+        const activeProperty = prev.projects.find(p => p.id === prev.activeProjectId);
         const activeImageProject = activeProperty?.imageProjects.find(ip => ip.id === imageProjectId);
 
         if (prev.activeImageProjectId) {
@@ -206,10 +206,10 @@ export const usePhotoMind = () => {
   
   const modifyActiveImageProject = (updater: (imageProject: ImageProject) => ImageProject) => {
       setState(prev => {
-        if (!prev.activePropertyId || !prev.activeImageProjectId) return prev;
+        if (!prev.activeProjectId || !prev.activeImageProjectId) return prev;
         
-        const updatedPropertyListings = prev.propertyListings.map(prop => {
-            if (prop.id === prev.activePropertyId) {
+        const updatedProjects = prev.projects.map(prop => {
+            if (prop.id === prev.activeProjectId) {
                 const updatedImageProjects = prop.imageProjects.map(imgProj => {
                     if (imgProj.id === prev.activeImageProjectId) {
                         return updater(imgProj);
@@ -220,7 +220,7 @@ export const usePhotoMind = () => {
             }
             return prop;
         });
-        return { ...prev, propertyListings: updatedPropertyListings };
+        return { ...prev, projects: updatedProjects };
       });
   };
 
@@ -229,7 +229,7 @@ export const usePhotoMind = () => {
 
     const latestState = { ...state };
 
-    const activeProp = latestState.propertyListings.find(p => p.id === latestState.activePropertyId);
+    const activeProp = latestState.projects.find(p => p.id === latestState.activeProjectId);
     const activeImageProject = activeProp?.imageProjects.find(ip => ip.id === latestState.activeImageProjectId);
 
     if (!activeImageProject) {
@@ -287,8 +287,8 @@ export const usePhotoMind = () => {
 
         setState(prev => {
             let newVersionIndex = prev.activeVersionIndex;
-            const updatedPropertyListings = prev.propertyListings.map(prop => {
-                if (prop.id === prev.activePropertyId) {
+            const updatedProjects = prev.projects.map(prop => {
+                if (prop.id === prev.activeProjectId) {
                     const updatedImageProjects = prop.imageProjects.map(imgProj => {
                         if (imgProj.id === prev.activeImageProjectId) {
                             const newVersions = [...imgProj.versions, newVersion];
@@ -307,7 +307,7 @@ export const usePhotoMind = () => {
             });
             return {
                 ...prev,
-                propertyListings: updatedPropertyListings,
+                projects: updatedProjects,
                 activeVersionIndex: newVersionIndex,
                 isLoading: false
             };
@@ -320,7 +320,7 @@ export const usePhotoMind = () => {
   };
 
   const sendMessage = useCallback(async (message: string, maskDataUrl?: string) => {
-    if (!state.activePropertyId || !state.activeImageProjectId) return;
+    if (!state.activeProjectId || !state.activeImageProjectId) return;
     
     const userMessage: ChatMessage = { id: `msg-${Date.now()}`, role: 'user', content: message };
     
@@ -350,14 +350,14 @@ export const usePhotoMind = () => {
        setState(prev => ({ ...prev, isLoading: false, error: `Failed to process message. ${errorMessage}` }));
     }
 
-  }, [state.activePropertyId, state.activeImageProjectId]);
+  }, [state.activeProjectId, state.activeImageProjectId]);
   
   const handlePresetSubmit = useCallback((prompt: string, userMessageText: string) => {
-    if (!state.activePropertyId || !state.activeImageProjectId) return;
+    if (!state.activeProjectId || !state.activeImageProjectId) return;
     const userMessage: ChatMessage = { id: `msg-${Date.now()}`, role: 'user', content: userMessageText };
     modifyActiveImageProject(ip => ({ ...ip, chatHistory: [...ip.chatHistory, userMessage] }));
     handleAIEdit(prompt, 'preset');
-  }, [state.activePropertyId, state.activeImageProjectId]);
+  }, [state.activeProjectId, state.activeImageProjectId]);
 
   
   const toggleSaveVersion = useCallback((versionId: string) => {
@@ -385,7 +385,7 @@ export const usePhotoMind = () => {
   const addWatermark = useCallback((versionId: string) => {
     setState(prev => ({...prev, isLoading: true, error: null}));
 
-    const prop = state.propertyListings.find(p => p.id === state.activePropertyId);
+    const prop = state.projects.find(p => p.id === state.activeProjectId);
     const ip = prop?.imageProjects.find(ip => ip.id === state.activeImageProjectId);
     const sourceVersion = ip?.versions.find(v => v.id === versionId);
 
@@ -406,8 +406,8 @@ export const usePhotoMind = () => {
 
             setState(prev => {
                 let newActiveIndex = prev.activeVersionIndex;
-                const updatedListings = prev.propertyListings.map(prop => {
-                    if (prop.id === prev.activePropertyId) {
+                const updatedListings = prev.projects.map(prop => {
+                    if (prop.id === prev.activeProjectId) {
                         const updatedImageProjects = prop.imageProjects.map(imgProj => {
                             if (imgProj.id === prev.activeImageProjectId) {
                                 const sourceVersionIndex = imgProj.versions.findIndex(v => v.id === versionId);
@@ -426,7 +426,7 @@ export const usePhotoMind = () => {
                 });
                 return { 
                     ...prev, 
-                    propertyListings: updatedListings, 
+                    projects: updatedListings, 
                     activeVersionIndex: newActiveIndex,
                     isLoading: false 
                 };
@@ -437,11 +437,11 @@ export const usePhotoMind = () => {
             setState(prev => ({...prev, isLoading: false, error: "Failed to apply watermark."}));
         });
 
-  }, [state.activePropertyId, state.activeImageProjectId, state.propertyListings]);
+  }, [state.activeProjectId, state.activeImageProjectId, state.projects]);
 
   const goToNextVersion = useCallback(() => {
     setState(prev => {
-        const activeProperty = prev.propertyListings.find(p => p.id === prev.activePropertyId);
+        const activeProperty = prev.projects.find(p => p.id === prev.activeProjectId);
         const activeImageProject = activeProperty?.imageProjects.find(ip => ip.id === prev.activeImageProjectId);
         if (!activeImageProject || activeImageProject.versions.length <= 1) return prev;
 
@@ -456,7 +456,7 @@ export const usePhotoMind = () => {
 
   const goToPrevVersion = useCallback(() => {
     setState(prev => {
-        const activeProperty = prev.propertyListings.find(p => p.id === prev.activePropertyId);
+        const activeProperty = prev.projects.find(p => p.id === prev.activeProjectId);
         const activeImageProject = activeProperty?.imageProjects.find(ip => ip.id === prev.activeImageProjectId);
         if (!activeImageProject || activeImageProject.versions.length <= 1) return prev;
 
@@ -472,18 +472,18 @@ export const usePhotoMind = () => {
   const renameProperty = useCallback((propertyId: string, newAddress: string) => {
     setState(prev => ({
         ...prev,
-        propertyListings: prev.propertyListings.map(p => 
-            p.id === propertyId ? { ...p, address: newAddress } : p
+        projects: prev.projects.map(p => 
+            p.id === propertyId ? { ...p, name: newAddress } : p
         )
     }));
   }, []);
 
   const renameImageProject = useCallback((imageProjectId: string, newName: string) => {
     setState(prev => {
-        if (!prev.activePropertyId) return prev;
+        if (!prev.activeProjectId) return prev;
 
-        const updatedListings = prev.propertyListings.map(prop => {
-            if (prop.id === prev.activePropertyId) {
+        const updatedListings = prev.projects.map(prop => {
+            if (prop.id === prev.activeProjectId) {
                 const updatedImageProjects = prop.imageProjects.map(imgProj => {
                     if (imgProj.id === imageProjectId) {
                         return { ...imgProj, name: newName };
@@ -494,16 +494,16 @@ export const usePhotoMind = () => {
             }
             return prop;
         });
-        return { ...prev, propertyListings: updatedListings };
+        return { ...prev, projects: updatedListings };
     });
   }, []);
 
   const handleEnhancePrompt = useCallback(async (prompt: string): Promise<string> => {
-    if (!state.activePropertyId || !state.activeImageProjectId) {
+    if (!state.activeProjectId || !state.activeImageProjectId) {
       return prompt;
     }
 
-    const activeProp = state.propertyListings.find(p => p.id === state.activePropertyId);
+    const activeProp = state.projects.find(p => p.id === state.activeProjectId);
     const activeImageProject = activeProp?.imageProjects.find(ip => ip.id === state.activeImageProjectId);
 
     if (!activeImageProject) {
@@ -522,10 +522,10 @@ export const usePhotoMind = () => {
       console.error('Failed to enhance prompt:', error);
       return prompt;
     }
-  }, [state.activePropertyId, state.activeImageProjectId, state.propertyListings]);
+  }, [state.activeProjectId, state.activeImageProjectId, state.projects]);
   
   // Expose the active version index for the editor to use
-  const activeImageProject = state.propertyListings.find(p => p.id === state.activePropertyId)?.imageProjects.find(ip => ip.id === state.activeImageProjectId);
+  const activeImageProject = state.projects.find(p => p.id === state.activeProjectId)?.imageProjects.find(ip => ip.id === state.activeImageProjectId);
   const derivedActiveVersion = activeImageProject?.versions[state.activeVersionIndex];
 
   return {

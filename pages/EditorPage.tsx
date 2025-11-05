@@ -4,12 +4,12 @@ import { ImagePanel } from '../components/ImagePanel';
 import { Header } from '../components/Header';
 import { PropertyImageNavigator } from '../components/PropertyImageNavigator';
 import { Button } from '../components/ui/Button';
-import type { PropertyListing } from '../types';
+import type { Project } from '../types';
 import { downloadDataUrl } from '../utils/fileUtils';
 import { FullScreenViewer } from '../components/FullScreenViewer';
 
 interface EditorPageProps {
-    property: PropertyListing;
+    property: Project;
     activeImageProjectId: string;
     activeVersionIndex: number;
     onGoToProperty: () => void;

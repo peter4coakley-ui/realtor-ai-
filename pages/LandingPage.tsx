@@ -26,7 +26,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               "lowPrice": "0",
               "highPrice": "99",
             },
-            "description": "Professional AI-powered real estate photo editing platform for virtual staging and enhancements"
+            "description": "Professional AI-powered photo editing platform with unlimited creative freedom for transformations and enhancements"
           })
         }}
       />
@@ -54,13 +54,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Transform Your Listings<br />
+              Transform Your Vision<br />
               <span className="bg-gradient-to-r from-teal-400 to-cyan-300 bg-clip-text text-transparent">
                 With AI-Powered Editing
               </span>
             </h1>
             <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Professional real estate photo editing in seconds. Virtual staging, twilight conversions, and MLS-compliant enhancements for realtors and photographers.
+              Professional photo editing with unlimited creative freedom. Structural modifications, scene transformations, and photorealistic enhancements for creators and professionals.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button size="lg" onClick={onGetStarted} className="bg-teal-500 hover:bg-teal-600 text-white text-lg px-8 py-6">
@@ -79,9 +79,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Everything You Need to Sell Faster
+              Everything You Need to Create Stunning Images
             </h2>
-            <p className="text-lg text-gray-400">Powerful AI tools designed specifically for real estate professionals</p>
+            <p className="text-lg text-gray-400">Powerful AI tools with unlimited creative freedom for any transformation</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -89,9 +89,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               <div className="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center mb-4">
                 <VirtualStagingIcon className="w-6 h-6 text-teal-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Virtual Staging</h3>
+              <h3 className="text-xl font-semibold text-white mb-3">Room Transformation</h3>
               <p className="text-gray-400">
-                Instantly clear rooms and add professional furnishings. Show buyers the full potential of empty spaces.
+                Completely redesign spaces - clear rooms, add furniture, change layouts. Full creative control over any interior space.
               </p>
             </div>
 
@@ -99,9 +99,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               <div className="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center mb-4">
                 <TwilightIcon className="w-6 h-6 text-teal-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Twilight Conversions</h3>
+              <h3 className="text-xl font-semibold text-white mb-3">Time-of-Day Transformations</h3>
               <p className="text-gray-400">
-                Transform daytime photos into stunning twilight shots that make listings stand out and sell faster.
+                Transform daytime photos into stunning twilight shots with dramatic lighting and atmosphere.
               </p>
             </div>
 
@@ -109,9 +109,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               <div className="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center mb-4">
                 <ExteriorBoostIcon className="w-6 h-6 text-teal-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Sky & Lawn Enhancement</h3>
+              <h3 className="text-xl font-semibold text-white mb-3">Scene Enhancement</h3>
               <p className="text-gray-400">
-                Perfect blue skies and lush green lawns with one click. Enhance curb appeal automatically.
+                Perfect skies, vibrant landscapes, and environmental improvements. Transform entire scenes with one click.
               </p>
             </div>
 
@@ -129,9 +129,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               <div className="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center mb-4">
                 <CheckIcon className="w-6 h-6 text-teal-400" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">MLS Compliant</h3>
+              <h3 className="text-xl font-semibold text-white mb-3">Structural Modifications</h3>
               <p className="text-gray-400">
-                All edits follow NAR and MLS guidelines. Never alter property structure or hide significant flaws.
+                Add windows, remove walls, change architecture. Complete creative freedom for any structural transformation.
               </p>
             </div>
 
@@ -143,7 +143,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">Lightning Fast</h3>
               <p className="text-gray-400">
-                Edit multiple photos in seconds. Batch processing for entire properties. Download and share instantly.
+                Edit multiple photos in seconds. Batch processing for entire projects. Download and share instantly.
               </p>
             </div>
           </div>
@@ -264,10 +264,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-teal-900/30 to-cyan-900/30">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to Transform Your Listings?
+            Ready to Transform Your Images?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Join thousands of real estate professionals using AI to close deals faster
+            Join thousands of creative professionals using AI to bring their vision to life
           </p>
           <Button size="lg" onClick={onGetStarted} className="bg-teal-500 hover:bg-teal-600 text-white text-lg px-12 py-6">
             Start Your Free Trial

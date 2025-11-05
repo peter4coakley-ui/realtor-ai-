@@ -9,7 +9,7 @@ interface HeaderProps {
     onGoHome?: () => void;
     onGoToProperty?: () => void;
     onAddPhotos?: () => void;
-    currentView: 'home' | 'property' | 'editor';
+    currentView: 'home' | 'project' | 'editor';
     isNavigatorVisible?: boolean;
     onToggleNavigator?: () => void;
 }
@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
             {onGoToProperty && (
               <Button onClick={onGoToProperty} variant="ghost">
                   <ChevronLeftIcon className="w-5 h-5 mr-2" />
-                  Back to Property
+                  Back to Project
               </Button>
             )}
             {onToggleNavigator && (
@@ -59,13 +59,13 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </>
         )}
-        {currentView === 'property' && onGoHome && (
+        {currentView === 'project' && onGoHome && (
             <Button onClick={onGoHome} variant="ghost">
                 <LayoutGridIcon className="w-5 h-5 mr-2" />
                 Dashboard
             </Button>
         )}
-        {currentView === 'property' && onAddPhotos && (
+        {currentView === 'project' && onAddPhotos && (
             <Button onClick={onAddPhotos} variant="default">
                 <PlusCircleIcon className="w-5 h-5 mr-2" />
                 Add Photos
@@ -74,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({
         {currentView === 'home' && onNewListing && (
             <Button onClick={onNewListing} variant="default">
                 <PlusCircleIcon className="w-5 h-5 mr-2" />
-                New Property
+                New Project
             </Button>
         )}
         {profile && (

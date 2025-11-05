@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { PropertyListing, ImageProject } from '../types';
+import type { Project, ImageProject } from '../types';
 import { Header } from '../components/Header';
 import { UploadIcon, EditIcon, CheckIcon } from '../components/icons';
 import { Button } from '../components/ui/Button';
@@ -8,7 +8,7 @@ import { Input } from '../components/ui/Input';
 const PROPERTY_FILE_INPUT_ID = 'property-image-upload';
 
 interface PropertyPageProps {
-  property: PropertyListing;
+  property: Project;
   onSelectImageProject: (imageProjectId: string) => void;
   onAddPhotos: (files: File[]) => void;
   onGoHome: () => void;
@@ -95,7 +95,7 @@ const PropertyPage: React.FC<PropertyPageProps> = ({
 }) => {
   
   const [isEditingProperty, setIsEditingProperty] = useState(false);
-  const [propertyName, setPropertyName] = useState(property.address);
+  const [propertyName, setPropertyName] = useState(property.name);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -109,7 +109,7 @@ const PropertyPage: React.FC<PropertyPageProps> = ({
   };
   
   const handleRenameProperty = () => {
-    if (propertyName.trim() && propertyName.trim() !== property.address) {
+    if (propertyName.trim() && propertyName.trim() !== property.name) {
       onRenameProperty(property.id, propertyName.trim());
     }
     setIsEditingProperty(false);
@@ -119,7 +119,7 @@ const PropertyPage: React.FC<PropertyPageProps> = ({
     if (e.key === 'Enter') {
       handleRenameProperty();
     } else if (e.key === 'Escape') {
-      setPropertyName(property.address);
+      setPropertyName(property.name);
       setIsEditingProperty(false);
     }
   };
@@ -134,7 +134,7 @@ const PropertyPage: React.FC<PropertyPageProps> = ({
         accept="image/*"
         multiple
       />
-      <Header onGoHome={onGoHome} onAddPhotos={handleAddPhotosClick} currentView="property" />
+      <Header onGoHome={onGoHome} onAddPhotos={handleAddPhotosClick} currentView="project" />
       <main className="flex-grow overflow-y-auto p-8">
         <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
@@ -154,7 +154,7 @@ const PropertyPage: React.FC<PropertyPageProps> = ({
                 </div>
               ) : (
                 <>
-                  <h1 className="text-3xl font-bold" title={property.address}>{property.address}</h1>
+                  <h1 className="text-3xl font-bold" title={property.name}>{property.name}</h1>
                   <Button size="icon" variant="ghost" onClick={() => setIsEditingProperty(true)} title="Rename Property">
                     <EditIcon className="w-5 h-5 text-gray-400 hover:text-white" />
                   </Button>

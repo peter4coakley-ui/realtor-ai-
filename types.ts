@@ -27,9 +27,9 @@ export interface ImageProject {
   originalFile: File;
 }
 
-export interface PropertyListing {
+export interface Project {
     id: string;
-    address: string;
+    name: string;
     imageProjects: ImageProject[];
 }
 

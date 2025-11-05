@@ -2,17 +2,20 @@ import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { Button } from '../components/ui/Button'
-import { Input } from '../components/ui/Input'
+import { EnhancedInput } from '../components/ui/EnhancedInput'
+import { PasswordInput } from '../components/ui/PasswordInput'
 import { Alert } from '../components/ui/Alert'
+import { validateEmail, validatePassword, normalizeEmail } from '../utils/formValidation'
 
 export function Signup() {
   const { signUp, user } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [emailValid, setEmailValid] = useState(false)
+  const [passwordValid, setPasswordValid] = useState(false)
 
   if (user) {
     return <Navigate to="/dashboard" replace />
@@ -24,26 +27,28 @@ export function Signup() {
     setError('')
     setSuccess(false)
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match')
+    const passwordCheck = validatePassword(password)
+    if (!passwordCheck.isValid) {
+      setError(passwordCheck.error || 'Please check your password')
       setLoading(false)
       return
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters')
-      setLoading(false)
-      return
-    }
+    const normalizedEmail = normalizeEmail(email)
+    const { error } = await signUp(normalizedEmail, password)
 
-    const { error } = await signUp(email, password)
-    
     if (error) {
-      setError(error.message)
+      if (error.message.includes('already registered')) {
+        setError('This email is already registered. Please sign in instead.')
+      } else if (error.message.includes('invalid email')) {
+        setError('Please enter a valid email address.')
+      } else {
+        setError(error.message)
+      }
     } else {
       setSuccess(true)
     }
-    
+
     setLoading(false)
   }
 
@@ -86,31 +91,29 @@ export function Signup() {
           )}
           
           <div className="space-y-4">
-            <Input
+            <EnhancedInput
               label="Email address"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={setEmail}
+              validate={validateEmail}
+              normalize={normalizeEmail}
+              onValidationChange={(result) => setEmailValid(result.isValid)}
               required
               autoComplete="email"
+              placeholder="you@example.com"
+              helperText="We'll never share your email with anyone"
             />
-            
-            <Input
+
+            <PasswordInput
               label="Password"
-              type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
+              showStrength={true}
+              showRequirements={true}
               required
               autoComplete="new-password"
-            />
-            
-            <Input
-              label="Confirm Password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              autoComplete="new-password"
+              placeholder="Create a strong password"
             />
           </div>
 
@@ -118,11 +121,16 @@ export function Signup() {
             <Button
               type="submit"
               loading={loading}
+              disabled={loading || !email || !password || password.length < 6}
               className="w-full"
             >
-              Sign up
+              Create Account
             </Button>
           </div>
+
+          <p className="text-xs text-center text-gray-400">
+            By creating an account, you agree to our Terms of Service and Privacy Policy
+          </p>
 
           <div className="text-center">
             <span className="text-sm text-gray-300">

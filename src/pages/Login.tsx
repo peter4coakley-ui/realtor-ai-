@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { Button } from '../components/ui/Button'
-import { Input } from '../components/ui/Input'
+import { EnhancedInput } from '../components/ui/EnhancedInput'
+import { PasswordInput } from '../components/ui/PasswordInput'
 import { Alert } from '../components/ui/Alert'
+import { validateEmail, normalizeEmail } from '../utils/formValidation'
 
 export function Login() {
   const { signIn, user } = useAuth()
@@ -11,6 +13,7 @@ export function Login() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [emailValid, setEmailValid] = useState(false)
 
   if (user) {
     return <Navigate to="/dashboard" replace />
@@ -21,12 +24,19 @@ export function Login() {
     setLoading(true)
     setError('')
 
-    const { error } = await signIn(email, password)
-    
+    const normalizedEmail = normalizeEmail(email)
+    const { error } = await signIn(normalizedEmail, password)
+
     if (error) {
-      setError(error.message)
+      if (error.message.includes('Invalid login credentials')) {
+        setError('The email or password you entered is incorrect. Please try again.')
+      } else if (error.message.includes('Email not confirmed')) {
+        setError('Please verify your email address before signing in.')
+      } else {
+        setError(error.message)
+      }
     }
-    
+
     setLoading(false)
   }
 
@@ -52,22 +62,27 @@ export function Login() {
           )}
           
           <div className="space-y-4">
-            <Input
+            <EnhancedInput
               label="Email address"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={setEmail}
+              validate={validateEmail}
+              normalize={normalizeEmail}
+              onValidationChange={(result) => setEmailValid(result.isValid)}
               required
               autoComplete="email"
+              placeholder="you@example.com"
             />
-            
-            <Input
+
+            <PasswordInput
               label="Password"
-              type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
+              showStrength={false}
               required
               autoComplete="current-password"
+              placeholder="Enter your password"
             />
           </div>
 
@@ -75,6 +90,7 @@ export function Login() {
             <Button
               type="submit"
               loading={loading}
+              disabled={loading || !email || !password}
               className="w-full"
             >
               Sign in

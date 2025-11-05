@@ -254,7 +254,7 @@ export const usePhotoMind = () => {
 
     try {
         const creditCost = CREDIT_COSTS.AI_EDIT;
-        const hasCredits = await useCreditService(creditCost, `AI Edit: ${prompt.substring(0, 50)}...`);
+        const hasCredits = await useCredits(creditCost, `AI Edit: ${prompt.substring(0, 50)}...`);
 
         if (!hasCredits) {
             setState(prev => ({

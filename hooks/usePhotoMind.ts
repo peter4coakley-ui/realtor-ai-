@@ -5,7 +5,6 @@ import { interpretUserIntent, generateImageEdit, analyzeImageAndSuggestEdits, an
 import { scrapeListingUrl } from '../services/listingScraperService';
 import { applyWatermark } from '../utils/imageUtils';
 import { storageService } from '../services/storageService';
-import { useCredits as useCreditService, CREDIT_COSTS } from '../src/lib/credits';
 import { useCredits, CREDIT_COSTS } from '../src/lib/credits';
 
 
@@ -255,7 +254,7 @@ export const usePhotoMind = () => {
 
     try {
         const creditCost = CREDIT_COSTS.AI_EDIT;
-        const hasCredits = await useCreditService(creditCost, `AI Edit: ${prompt.substring(0, 50)}...`);
+        const hasCredits = await useCredits(creditCost, `AI Edit: ${prompt.substring(0, 50)}...`);
 
         if (!hasCredits) {
             setState(prev => ({

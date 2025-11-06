@@ -163,17 +163,56 @@ export function Settings() {
             )}
           </div>
 
-          {/* Available Plans */}
+          {/* Buy Credits */}
+          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 shadow rounded-2xl p-6 mb-8">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-white">Buy Credits</h2>
+              <p className="text-sm text-gray-400 mt-1">One-time purchase • No subscription required</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {stripeProducts.filter(p => p.mode === 'payment').map((product) => (
+                <div key={product.id} className="border border-gray-700 rounded-2xl p-6 hover:border-teal-500 transition-all relative">
+                  {product.id === 'prod_professional' && (
+                    <span className="absolute -top-3 right-4 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-teal-500 text-white">
+                      Most Popular
+                    </span>
+                  )}
+                  <div className="mb-4">
+                    <h3 className="text-lg font-medium text-white mb-2">{product.name}</h3>
+                    <p className="text-sm text-gray-400">{product.description}</p>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-3xl font-bold text-white">
+                      {formatPrice(product.price, product.currency)}
+                    </span>
+                    <span className="text-sm text-gray-400 ml-2">one-time</span>
+                  </div>
+                  <Button
+                    onClick={() => handleCheckout(product.priceId, product.mode)}
+                    loading={checkoutLoading === product.priceId}
+                    className="w-full"
+                  >
+                    Buy Now
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Monthly Subscriptions */}
           <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 shadow rounded-2xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-6">Available Plans</h2>
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-white">Monthly Subscriptions</h2>
+              <p className="text-sm text-gray-400 mt-1">Automatic monthly credits • Cancel anytime</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {stripeProducts.map((product) => (
+              {stripeProducts.filter(p => p.mode === 'subscription').map((product) => (
                 <div key={product.id} className="border border-gray-700 rounded-2xl p-6 hover:border-teal-500 transition-all">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-medium text-white">{product.name}</h3>
                     {currentPlan?.id === product.id && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-500/20 text-teal-400 border border-teal-500/30">
-                        Current
+                        Current Plan
                       </span>
                     )}
                   </div>
@@ -181,9 +220,7 @@ export function Settings() {
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold text-white">
                       {formatPrice(product.price, product.currency)}
-                      <span className="text-sm font-normal text-gray-400">
-                        /{product.mode === 'subscription' ? 'month' : 'one-time'}
-                      </span>
+                      <span className="text-sm font-normal text-gray-400">/month</span>
                     </span>
                     <Button
                       onClick={() => handleCheckout(product.priceId, product.mode)}
